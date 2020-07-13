@@ -51,7 +51,6 @@ export default {
     }
     this.loading = false;
     this.fetching = false;
-    // Detect when scrolled to bottom.
     this.$nextTick(() => {
       window.addEventListener('scroll', this.debouncedScroll);
     });
