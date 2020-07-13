@@ -1,11 +1,9 @@
 <template>
-<div>
+<div class="position-relative">
+  <movies-loader v-if="loading || fetching" :style="{top: loading ? '3em' : 'auto' , bottom: fetching ? '4em' : 'auto'}" />
   <h1 class="mb-4">Now playing in theaters</h1>
-  <div v-if="loading" class="row">
-    <div class="col">Loading</div>
-  </div>
-  <div v-else class="row" ref="list">
-    <div v-for="(movie, index) in movies" :key="movie.id + index" class="col-md-6">
+  <div v-if="!loading" class="row" ref="list">
+    <div v-for="(movie, index) in movies" :key="`${movie.id}-${index}`" class="col-md-6">
       <movie-card
         :poster-path="movie.poster_path"
         :original-title="movie.original_title"
@@ -25,9 +23,9 @@ import { debounce } from 'lodash-es';
 import { fetchMovies } from '@/api/movies';
 import { mapState } from 'vuex';
 import MovieCard from '@/components/MovieCard.vue';
+import MoviesLoader from '@/components/MoviesLoader.vue';
 
 export default {
-  name: 'MoviesList',
   data: function() {
     return {
       movies: [],
@@ -38,7 +36,8 @@ export default {
     };
   },
   components: {
-    MovieCard
+    MovieCard,
+    MoviesLoader
   },
   created() {
     this.debouncedScroll = debounce(this.scroll, 150);
@@ -71,7 +70,6 @@ export default {
       return genreIds.map(id => this.genres[id]);
     },
     async scroll(e) {
-      console.log('scroll');
       if (this.fetching || this.movies.length === this.totalResults) {
         return;
       }
