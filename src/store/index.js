@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import { request } from '@/common/request';
+import { fetchGenres } from '@/api/genres';
 
 Vue.use(Vuex);
 
@@ -10,9 +10,7 @@ export default new Vuex.Store({
   },
   actions: {
     fetchGenres({ commit, state }, data) {
-      return request({
-        url: '/genre/movie/list'
-      }).then(res => {
+      return fetchGenres().then(res => {
         commit('SET_GENRES', res.genres);
       });
     }

@@ -5,7 +5,7 @@
     <div class="col">Loading</div>
   </div>
   <div v-else class="row" ref="list">
-    <div v-for="movie in movies" :key="movie.id" class="col-md-6">
+    <div v-for="(movie, index) in movies" :key="movie.id + index" class="col-md-6">
       <movie-card
         :poster-path="movie.poster_path"
         :original-title="movie.original_title"
@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { request } from '@/common/request';
+import { fetchMovies } from '@/api/movies';
 import { mapState } from 'vuex';
 import MovieCard from '@/components/MovieCard.vue';
 
@@ -32,7 +32,8 @@ export default {
       movies: [],
       loading: true,
       fetching: true,
-      page: 0
+      page: 0,
+      totalResults: 0
     };
   },
   components: {
@@ -40,7 +41,12 @@ export default {
   },
   async mounted() {
     await this.$store.dispatch('fetchGenres');
-    await this.fetchMovies(1);
+    const res = await fetchMovies(1);
+    if (res.results.length) {
+      this.movies = [...this.movies, ...res.results];
+      this.page = res.page;
+      this.totalResults = res.total_results;
+    }
     this.loading = false;
     this.fetching = false;
     // Detect when scrolled to bottom.
@@ -61,29 +67,20 @@ export default {
       return genreIds.map(id => this.genres[id]);
     },
     async scroll(e) {
-      if (this.fetching) {
+      if (this.fetching || this.movies.length === this.totalResults) {
         return;
       }
       if ((window.innerHeight + window.scrollY) >= document.body.scrollHeight) {
         this.fetching = true;
         const page = this.page + 1;
-        await this.fetchMovies(page);
-        this.fetching = false;
-      }
-    },
-    fetchMovies(page) {
-      console.log('fired');
-      return request({
-        url: 'movie/now_playing',
-        params: {
-          page: page
-        }
-      }).then(res => {
+        const res = await fetchMovies(page);
         if (res.results.length) {
           this.movies = [...this.movies, ...res.results];
           this.page = res.page;
+          this.totalResults = res.total_results;
         }
-      });
+        this.fetching = false;
+      }
     }
   }
 };
