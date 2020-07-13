@@ -8,3 +8,13 @@ export function fetchMovies(page) {
     }
   });
 };
+
+export function searchMovies(query, page) {
+  return request({
+    url: 'search/movie',
+    params: {
+      query,
+      page
+    }
+  });
+};

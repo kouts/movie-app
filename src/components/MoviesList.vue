@@ -19,17 +19,27 @@
 
 <script>
 import { debounce } from 'lodash-es';
-import { fetchMovies } from '@/api/movies';
+import { fetchMovies, searchMovies } from '@/api/movies';
 import { mapState } from 'vuex';
 import MovieCard from '@/components/MovieCard.vue';
 import MoviesLoader from '@/components/MoviesLoader.vue';
 
 export default {
+  props: {
+    mode: {
+      type: String,
+      default: 'list'
+    },
+    query: {
+      type: String,
+      default: ''
+    }
+  },
   data: function() {
     return {
       movies: [],
-      loading: true,
-      fetching: true,
+      loading: false,
+      fetching: false,
       page: 0,
       totalResults: 0
     };
@@ -38,19 +48,45 @@ export default {
     MovieCard,
     MoviesLoader
   },
+  watch: {
+    query: {
+      handler: async function(val, oldVal) {
+        this.fetching = true;
+        const page = 1;
+        let res = {};
+        if (val) {
+          res = await searchMovies(this.query, page);
+        } else {
+          res.results = [];
+        }
+        if (res.results.length) {
+          this.movies = res.results;
+          this.page = res.page;
+          this.totalResults = res.total_results;
+        } else {
+          this.movies = res.results;
+          this.page = 0;
+          this.totalResults = 0;
+        }
+        this.fetching = false;
+      }
+    }
+  },
   created() {
     this.debouncedScroll = debounce(this.scroll, 150);
   },
   async mounted() {
     await this.$store.dispatch('fetchGenres');
-    const res = await fetchMovies(1);
-    if (res.results.length) {
-      this.movies = [...this.movies, ...res.results];
-      this.page = res.page;
-      this.totalResults = res.total_results;
+    if (this.mode === 'list') {
+      this.loading = true;
+      const res = await fetchMovies(1);
+      if (res.results.length) {
+        this.movies = [...this.movies, ...res.results];
+        this.page = res.page;
+        this.totalResults = res.total_results;
+      }
+      this.loading = false;
     }
-    this.loading = false;
-    this.fetching = false;
     this.$nextTick(() => {
       window.addEventListener('scroll', this.debouncedScroll);
     });
@@ -74,7 +110,12 @@ export default {
       if ((window.innerHeight + window.scrollY) >= document.body.scrollHeight) {
         this.fetching = true;
         const page = this.page + 1;
-        const res = await fetchMovies(page);
+        let res = {};
+        if (this.query) {
+          res = await searchMovies(this.query, page);
+        } else {
+          res = await fetchMovies(page);
+        }
         if (res.results.length) {
           this.movies = [...this.movies, ...res.results];
           this.page = res.page;
