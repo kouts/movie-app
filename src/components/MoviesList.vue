@@ -1,7 +1,6 @@
 <template>
 <div class="position-relative">
-  <movies-loader v-if="loading || fetching" :style="{top: loading ? '3em' : 'auto' , bottom: fetching ? '4em' : 'auto'}" />
-  <h1 class="mb-4">Now playing in theaters</h1>
+  <movies-loader v-if="loading || fetching" :style="{top: loading ? '1em' : 'auto' , bottom: fetching ? '2em' : 'auto'}" />
   <div v-if="!loading" class="row" ref="list">
     <div v-for="(movie, index) in movies" :key="`${movie.id}-${index}`" class="col-md-6">
       <movie-card
