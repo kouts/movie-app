@@ -21,6 +21,7 @@
 </template>
 
 <script>
+import { debounce } from 'lodash-es';
 import { fetchMovies } from '@/api/movies';
 import { mapState } from 'vuex';
 import MovieCard from '@/components/MovieCard.vue';
@@ -39,6 +40,9 @@ export default {
   components: {
     MovieCard
   },
+  created() {
+    this.debouncedScroll = debounce(this.scroll, 150);
+  },
   async mounted() {
     await this.$store.dispatch('fetchGenres');
     const res = await fetchMovies(1);
@@ -51,11 +55,11 @@ export default {
     this.fetching = false;
     // Detect when scrolled to bottom.
     this.$nextTick(() => {
-      window.addEventListener('scroll', this.scroll);
+      window.addEventListener('scroll', this.debouncedScroll);
     });
   },
   beforeDestroy() {
-    window.removeEventListener('scroll', this.scroll);
+    window.removeEventListener('scroll', this.debouncedScroll);
   },
   computed: {
     ...mapState({
@@ -67,6 +71,7 @@ export default {
       return genreIds.map(id => this.genres[id]);
     },
     async scroll(e) {
+      console.log('scroll');
       if (this.fetching || this.movies.length === this.totalResults) {
         return;
       }
