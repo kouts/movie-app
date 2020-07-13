@@ -27,8 +27,6 @@
 </template>
 
 <script>
-import { chop } from '@/common/utils';
-
 export default {
   props: {
     posterPath: {
@@ -54,11 +52,6 @@ export default {
     overview: {
       type: String,
       default: ''
-    }
-  },
-  computed: {
-    shortOverview() {
-      return chop(this.overview, 60);
     }
   }
 };

@@ -6,8 +6,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    genres: [],
-    movies: []
+    genres: []
   },
   actions: {
     fetchGenres({ commit, state }, data) {
@@ -15,17 +14,6 @@ export default new Vuex.Store({
         url: '/genre/movie/list'
       }).then(res => {
         commit('SET_GENRES', res.genres);
-      });
-    },
-    fetchMovies({ commit, state }, data) {
-      console.log(data);
-      return request({
-        url: 'movie/now_playing',
-        params: {
-          page: data.page
-        }
-      }).then(res => {
-        commit('SET_MOVIES', res.results);
       });
     }
   },
@@ -36,9 +24,6 @@ export default new Vuex.Store({
         genres[data[index].id] = data[index].name;
       }
       state.genres = genres;
-    },
-    SET_MOVIES(state, data) {
-      state.movies = data;
     }
   },
   modules: {
