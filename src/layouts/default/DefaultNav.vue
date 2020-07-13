@@ -1,0 +1,46 @@
+<template>
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="#">MovieRama</a>
+      <button
+        :class="['navbar-toggler', !navbarExpanded && 'collapsed']"
+        type="button"
+        aria-controls="navbarDefault"
+        :aria-expanded="navbarExpanded"
+        aria-label="Toggle navigation"
+        @click="toggleNavbar"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div :class="['collapse navbar-collapse', navbarExpanded && 'show']" id="navbarDefault">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <router-link to="/" exact exact-active-class="active" class="nav-link" @click.native="collapseNavbar">In Theaters</router-link>
+          </li>
+          <li class="nav-item">
+            <router-link to="/search" class="nav-link" @click.native="collapseNavbar">Search</router-link>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</template>
+
+<script>
+export default {
+  data: function() {
+    return {
+      navbarExpanded: false
+    };
+  },
+  methods: {
+    toggleNavbar() {
+      this.navbarExpanded = !this.navbarExpanded;
+    },
+    collapseNavbar() {
+      this.navbarExpanded = false;
+    }
+  }
+};
+</script>
