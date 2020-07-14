@@ -39,7 +39,7 @@ export default {
   data: function() {
     return {
       movies: [],
-      genres: [],
+      genresMap: [],
       loading: false,
       fetching: false,
       page: 0,
@@ -74,11 +74,8 @@ export default {
       }
     }
   },
-  created() {
-    this.debouncedScroll = debounce(this.scroll, 150);
-  },
   async mounted() {
-    this.genres = await fetchGenres();
+    this.genresMap = await fetchGenres();
     if (this.mode === 'list') {
       this.loading = true;
       const res = await fetchMovies(1);
@@ -88,21 +85,22 @@ export default {
       this.loading = false;
     }
     this.$nextTick(() => {
-      window.addEventListener('scroll', this.debouncedScroll);
+      window.addEventListener('scroll', this.scrollHandler);
     });
   },
   beforeDestroy() {
-    window.removeEventListener('scroll', this.debouncedScroll);
+    window.removeEventListener('scroll', this.scrollHandler);
   },
   methods: {
     getMovieGenres(genreIds) {
-      return genreIds.map(id => this.genres[id]);
+      return genreIds.map(id => this.genresMap[id]);
     },
-    async scroll(e) {
+    scrollHandler: debounce(async function() {
       if (this.fetching || this.movies.length === this.totalResults) {
         return;
       }
       if ((window.innerHeight + window.scrollY) >= document.body.scrollHeight) {
+        console.log(this.page);
         this.fetching = true;
         const page = this.page + 1;
         let res = {};
@@ -116,7 +114,7 @@ export default {
         }
         this.fetching = false;
       }
-    },
+    }, 150),
     updateMoviesAndPagingInfo(movies, page, totalResults) {
       this.movies = this.movies.concat(movies);
       this.page = page;
