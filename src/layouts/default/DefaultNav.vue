@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
     <div class="container">
-      <a class="navbar-brand" href="#">MovieRama</a>
+      <router-link to="/" exact exact-active-class="active" class="navbar-brand" @click.native="collapseNavbar">MovieRama</router-link>
       <button
         :class="['navbar-toggler', !navbarExpanded && 'collapsed']"
         type="button"

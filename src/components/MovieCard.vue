@@ -1,6 +1,5 @@
 <template>
 <div class="card mb-3">
-  <!-- <img :src="`https://image.tmdb.org/t/p/w500/${posterPath}`" class="card-img-top" :alt="originalTitle"> -->
   <div class="card-body">
     <div class="d-flex flex-row justify-content-between">
       <h5>{{ originalTitle }}</h5>
@@ -10,15 +9,18 @@
     </div>
     <div class="row mb-2">
       <div class="col-md-4">
-        <img :src="`https://image.tmdb.org/t/p/w500/${posterPath}`" class="img-fluid" :alt="originalTitle">
+        <img v-if="posterPath" :src="`https://image.tmdb.org/t/p/w500/${posterPath}`" class="img-fluid" :alt="originalTitle">
+        <img v-else src="@/assets/not-available.png" class="img-fluid border" alt="Poster not available">
       </div>
       <div class="col-md-8">
-        <p>{{ overview }}</p>
+        <p v-if="overview">{{ overview }}</p>
+        <p v-else class="text-muted">No description available</p>
       </div>
     </div>
     <div class="row">
       <div class="col-md-12">
-        Genre(s): <span v-for="(genre, index) in genres" :key="index" class="badge badge-pill badge-info ml-1">{{ genre }}</span>
+        Genres: <span v-for="(genre, index) in genres" :key="index" class="badge badge-pill badge-info ml-1">{{ genre }}</span>
+        <span v-if="genres.length === 0" class="text-muted">N/A</span>
       </div>
     </div>
     <!-- <p class="card-text" :title="overview">{{ overview }}</p> -->
