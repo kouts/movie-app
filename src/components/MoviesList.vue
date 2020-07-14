@@ -1,5 +1,6 @@
 <template>
 <div class="position-relative">
+  <div v-if="mode === 'search' && query && movies.length === 0" class="col">No results found</div>
   <movies-loader v-if="loading || fetching" :style="{top: loading ? '1em' : 'auto' , bottom: fetching ? '2em' : 'auto'}" />
   <div v-if="!loading" class="row" ref="list">
     <div v-for="(movie, index) in movies" :key="`${movie.id}-${index}`" class="col-md-6">
@@ -19,8 +20,8 @@
 
 <script>
 import { debounce } from 'lodash-es';
+import { fetchGenres } from '@/api/genres';
 import { fetchMovies, searchMovies } from '@/api/movies';
-import { mapState } from 'vuex';
 import MovieCard from '@/components/MovieCard.vue';
 import MoviesLoader from '@/components/MoviesLoader.vue';
 
@@ -38,6 +39,7 @@ export default {
   data: function() {
     return {
       movies: [],
+      genres: [],
       loading: false,
       fetching: false,
       page: 0,
@@ -51,7 +53,7 @@ export default {
   watch: {
     query: {
       handler: async function(val, oldVal) {
-        this.fetching = true;
+        this.loading = true;
         const page = 1;
         let res = {};
         if (val) {
@@ -68,7 +70,7 @@ export default {
           this.page = 0;
           this.totalResults = 0;
         }
-        this.fetching = false;
+        this.loading = false;
       }
     }
   },
@@ -76,14 +78,12 @@ export default {
     this.debouncedScroll = debounce(this.scroll, 150);
   },
   async mounted() {
-    await this.$store.dispatch('fetchGenres');
+    this.genres = await fetchGenres();
     if (this.mode === 'list') {
       this.loading = true;
       const res = await fetchMovies(1);
       if (res.results.length) {
-        this.movies = [...this.movies, ...res.results];
-        this.page = res.page;
-        this.totalResults = res.total_results;
+        this.updateMoviesAndPagingInfo(res.results, res.page, res.total_results);
       }
       this.loading = false;
     }
@@ -93,11 +93,6 @@ export default {
   },
   beforeDestroy() {
     window.removeEventListener('scroll', this.debouncedScroll);
-  },
-  computed: {
-    ...mapState({
-      genres: 'genres'
-    })
   },
   methods: {
     getMovieGenres(genreIds) {
@@ -111,18 +106,21 @@ export default {
         this.fetching = true;
         const page = this.page + 1;
         let res = {};
-        if (this.query) {
-          res = await searchMovies(this.query, page);
-        } else {
+        if (this.mode === 'list') {
           res = await fetchMovies(page);
+        } else if (this.mode === 'search') {
+          res = await searchMovies(this.query, page);
         }
         if (res.results.length) {
-          this.movies = [...this.movies, ...res.results];
-          this.page = res.page;
-          this.totalResults = res.total_results;
+          this.updateMoviesAndPagingInfo(res.results, res.page, res.total_results);
         }
         this.fetching = false;
       }
+    },
+    updateMoviesAndPagingInfo(movies, page, totalResults) {
+      this.movies = this.movies.concat(movies);
+      this.page = page;
+      this.totalResults = totalResults;
     }
   }
 };
