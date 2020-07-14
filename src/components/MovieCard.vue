@@ -13,8 +13,11 @@
         <img v-else src="@/assets/not-available.png" class="img-fluid border" alt="Poster not available">
       </div>
       <div class="col-md-8">
-        <p v-if="overview">{{ overview }}</p>
-        <p v-else class="text-muted">No description available</p>
+        <div class="position-relative overflow-hidden" ref="overviewBox" :style="{'max-height': expanded === true ? 'none' : '190px' }">
+          <p v-if="overview" class="mb-0">{{ overview }}</p>
+          <p v-else class="text-muted mb-0">No description available</p>
+        </div>
+        <div v-if="displayShowMore" class="text-center text-muted cursor-pointer mt-1" @click="toggleExpand">Show {{ expanded ? 'less' : 'more' }}...</div>
       </div>
     </div>
     <div class="row">
@@ -23,7 +26,6 @@
         <span v-if="genres.length === 0" class="text-muted">N/A</span>
       </div>
     </div>
-    <!-- <p class="card-text" :title="overview">{{ overview }}</p> -->
   </div>
 </div>
 </template>
@@ -55,10 +57,26 @@ export default {
       type: String,
       default: ''
     }
+  },
+  data: function() {
+    return {
+      displayShowMore: false,
+      expanded: false
+    };
+  },
+  mounted() {
+    this.displayShowMore = this.$refs.overviewBox.scrollHeight - 10 > this.$refs.overviewBox.clientHeight;
+  },
+  methods: {
+    toggleExpand() {
+      this.expanded = !this.expanded;
+    }
   }
 };
 </script>
 
 <style lang="scss" scoped>
-
+  .cursor-pointer {
+    cursor: pointer;
+  }
 </style>
