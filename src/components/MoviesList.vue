@@ -1,6 +1,11 @@
 <template>
 <div>
-  <movie-details />
+  <movie-details
+    :show-modal="showDetailsModal"
+    :movie-id="selectedMovieId"
+    :movie-title="selectedMovieTitle"
+    @modal-closed="showDetailsModal = false"
+  />
   <loader v-if="loading" />
   <div class="font-weight-bold text-center" v-if="mode === 'search' && query && movies.length === 0">
     No results found
@@ -8,6 +13,7 @@
   <div class="row">
     <div v-for="(movie, index) in movies" :key="`${movie.id}-${index}`" class="col-md-6">
       <movie-card
+        :movie-id="movie.id"
         :poster-path="movie.poster_path"
         :original-title="movie.original_title"
         :release-date="movie.release_date"
@@ -15,6 +21,7 @@
         :vote-average="movie.vote_average"
         :overview="movie.overview"
         :genres="getMovieGenres(movie.genre_ids)"
+        @view-details="viewDetails"
       />
     </div>
   </div>
@@ -49,7 +56,10 @@ export default {
       genresMap: [],
       loading: true,
       page: 0,
-      totalResults: 0
+      totalResults: 0,
+      showDetailsModal: false,
+      selectedMovieId: null,
+      selectedMovieTitle: ''
     };
   },
   components: {
@@ -109,6 +119,11 @@ export default {
     updatePagingInfo(page, totalResults) {
       this.page = page;
       this.totalResults = totalResults;
+    },
+    viewDetails(movieId, originalTitle) {
+      this.selectedMovieId = movieId;
+      this.selectedMovieTitle = originalTitle;
+      this.showDetailsModal = true;
     }
   }
 };

@@ -2,8 +2,8 @@
 <div class="card mb-3">
   <div class="card-body">
     <div class="d-flex flex-row justify-content-between">
-      <h5><a href="#" @click="emit('show-details')">{{ originalTitle }}</a></h5>
-      <div class="rating">
+      <h5><a href="#" @click.prevent="$emit('view-details', movieId, originalTitle)">{{ originalTitle }}</a> ({{ year || 'N/A'  }})</h5>
+      <div>
         {{ voteAverage }}<span class="text-muted"><small>/10</small></span>
       </div>
     </div>
@@ -33,6 +33,10 @@
 <script>
 export default {
   props: {
+    movieId: {
+      type: Number,
+      default: null
+    },
     posterPath: {
       type: String,
       default: ''
@@ -56,6 +60,11 @@ export default {
     overview: {
       type: String,
       default: ''
+    }
+  },
+  computed: {
+    year: function() {
+      return this.releaseDate.split('-')[0];
     }
   },
   data: function() {
@@ -87,11 +96,11 @@ export default {
     text-align: center;
     cursor: pointer;
     padding: 25px 8px 12px 8px;
-    font-size:0.9em;
+    font-size: 0.9em;
     position: relative;
-    z-index:1;
-    margin-top:-25px;
-    background-image:linear-gradient(to bottom, rgba(255,255,255,0.3) 0%, #fff 40%, #fff 100%);
+    z-index: 1;
+    margin-top: -25px;
+    background-image: linear-gradient(to bottom, rgba(255,255,255,0.3) 0%, #fff 40%, #fff 100%);
   }
   .show-more.is-on {
     background-image:none;

@@ -1,8 +1,8 @@
 <template>
   <div>
-    <Modal v-model="showModal" title="My first modal">
-      <p>Modal content goes here...</p>
-    </Modal>
+    <modal v-model="open" :title="movieTitle" modal-class="movie-details-modal">
+      <p>Modal content goes here... {{ movieId }}</p>
+    </modal>
   </div>
 </template>
 
@@ -11,18 +11,39 @@ import Modal from '@kouts/vue-modal';
 
 export default {
   props: {
-    displayModal: {
+    showModal: {
       type: Boolean,
       default: false
+    },
+    movieId: {
+      type: Number,
+      default: null
+    },
+    movieTitle: {
+      type: String,
+      default: ''
     }
   },
-  data: function() {
-    return {
-      showModal: false
-    };
+  computed: {
+    open: {
+      get() {
+        return this.showModal;
+      },
+      set(newValue) {
+        if (newValue === false) {
+          this.$emit('modal-closed');
+        }
+      }
+    }
   },
   components: {
     Modal
   }
 };
 </script>
+
+<style lang="scss">
+  .movie-details-modal {
+    max-width: 900px;
+  }
+</style>
