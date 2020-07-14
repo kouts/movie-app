@@ -1,7 +1,7 @@
 <template>
 <div>
   <loader v-if="loading" />
-  <div v-if="mode === 'search' && query && movies.length === 0" class="col">
+  <div class="font-weight-bold text-center" v-if="mode === 'search' && query && movies.length === 0">
     No results found
   </div>
   <div class="row">
@@ -17,6 +17,9 @@
       />
     </div>
   </div>
+  <div class="font-weight-bold text-center mt-4" v-if="movies.length === totalResults && totalResults > 0">
+    There are no more results to display
+  </div>
 </div>
 </template>
 
@@ -31,7 +34,7 @@ export default {
   props: {
     mode: {
       type: String,
-      default: 'list'
+      default: 'list' // 'list' or 'search'
     },
     query: {
       type: String,
@@ -55,10 +58,9 @@ export default {
     query: {
       handler: async function(val, oldVal) {
         this.loading = true;
-        const page = 1;
         let res = { results: [], page: 0, total_results: 0 };
         if (val !== '') {
-          res = await searchMovies(this.query, page);
+          res = await searchMovies(this.query, 1);
         }
         this.movies = res.results;
         this.updatePagingInfo(res.page, res.total_results);
@@ -70,10 +72,8 @@ export default {
     this.genresMap = await fetchGenres();
     if (this.mode === 'list') {
       const res = await fetchMovies(1);
-      if (res.results.length) {
-        this.movies = this.movies.concat(res.results);
-        this.updatePagingInfo(res.page, res.total_results);
-      }
+      this.movies = this.movies.concat(res.results);
+      this.updatePagingInfo(res.page, res.total_results);
     }
     window.addEventListener('scroll', this.scrollHandler);
     this.loading = false;
@@ -91,17 +91,15 @@ export default {
       }
       if ((window.innerHeight + window.scrollY) >= document.body.scrollHeight) {
         this.loading = true;
-        const page = this.page + 1;
+        const nextPage = this.page + 1;
         let res = {};
         if (this.mode === 'list') {
-          res = await fetchMovies(page);
+          res = await fetchMovies(nextPage);
         } else if (this.mode === 'search') {
-          res = await searchMovies(this.query, page);
+          res = await searchMovies(this.query, nextPage);
         }
-        if (res.results.length) {
-          this.movies = this.movies.concat(res.results);
-          this.updatePagingInfo(res.results, res.page, res.total_results);
-        }
+        this.movies = this.movies.concat(res.results);
+        this.updatePagingInfo(res.page, res.total_results);
         this.loading = false;
       }
     }, 150),
