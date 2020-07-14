@@ -4,5 +4,8 @@
 // Import Bootstrap source files
 @import "~bootstrap/scss/bootstrap";
 
+// Modal
+@import "~@kouts/vue-modal/dist/vue-modal.css";
+
 // In this scss we write our custom scss
 @import 'app';

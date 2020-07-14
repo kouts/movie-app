@@ -1,5 +1,6 @@
 <template>
 <div>
+  <movie-details />
   <loader v-if="loading" />
   <div class="font-weight-bold text-center" v-if="mode === 'search' && query && movies.length === 0">
     No results found
@@ -28,6 +29,7 @@ import { debounce } from 'lodash-es';
 import { fetchGenres } from '@/api/genres';
 import { fetchMovies, searchMovies } from '@/api/movies';
 import MovieCard from '@/components/MovieCard.vue';
+import MovieDetails from '@/components/MovieDetails.vue';
 import Loader from '@/components/Loader.vue';
 
 export default {
@@ -52,7 +54,8 @@ export default {
   },
   components: {
     Loader,
-    MovieCard
+    MovieCard,
+    MovieDetails
   },
   watch: {
     query: {

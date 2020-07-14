@@ -2,7 +2,7 @@
 <div class="card mb-3">
   <div class="card-body">
     <div class="d-flex flex-row justify-content-between">
-      <h5>{{ originalTitle }}</h5>
+      <h5><a href="#" @click="emit('show-details')">{{ originalTitle }}</a></h5>
       <div class="rating">
         {{ voteAverage }}<span class="text-muted"><small>/10</small></span>
       </div>
@@ -13,11 +13,11 @@
         <img v-else src="@/assets/not-available.png" class="img-fluid border" alt="Poster not available">
       </div>
       <div class="col-md-8">
-        <div class="position-relative overflow-hidden" ref="overviewBox" :style="{'max-height': expanded === true ? 'none' : '190px' }">
+        <div :class="['overview-box', expanded && 'is-expanded']" ref="overviewBox">
           <p v-if="overview" class="mb-0">{{ overview }}</p>
           <p v-else class="text-muted mb-0">No description available</p>
         </div>
-        <div v-if="displayShowMore" class="text-center text-muted cursor-pointer mt-1" @click="toggleExpand">Show {{ expanded ? 'less' : 'more' }}...</div>
+        <div v-if="displayShowMore" :class="['text-muted show-more', expanded && 'is-on']" @click="toggleExpand">{{ expanded ? 'collapse' : '...show full description' }}</div>
       </div>
     </div>
     <div class="row">
@@ -76,7 +76,24 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .cursor-pointer {
+  .overview-box {
+    overflow: hidden;
+    max-height: 170px;
+  }
+  .overview-box.is-expanded {
+    max-height: none;
+  }
+  .show-more {
+    text-align: center;
     cursor: pointer;
+    padding: 25px 8px 12px 8px;
+    font-size:0.9em;
+    position: relative;
+    z-index:1;
+    margin-top:-25px;
+    background-image:linear-gradient(to bottom, rgba(255,255,255,0.3) 0%, #fff 40%, #fff 100%);
+  }
+  .show-more.is-on {
+    background-image:none;
   }
 </style>
