@@ -15,7 +15,7 @@
       <movie-card
         :movie-id="movie.id"
         :poster-path="movie.poster_path"
-        :original-title="movie.original_title"
+        :title="movie.title"
         :release-date="movie.release_date"
         :genre-ids="movie.genre_ids"
         :vote-average="movie.vote_average"
@@ -120,9 +120,9 @@ export default {
       this.page = page;
       this.totalResults = totalResults;
     },
-    viewDetails(movieId, originalTitle) {
+    viewDetails(movieId, title) {
       this.selectedMovieId = movieId;
-      this.selectedMovieTitle = originalTitle;
+      this.selectedMovieTitle = title;
       this.showDetailsModal = true;
     }
   }

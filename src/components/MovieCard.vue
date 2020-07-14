@@ -2,14 +2,14 @@
 <div class="card mb-3">
   <div class="card-body">
     <div class="d-flex flex-row justify-content-between">
-      <h5><a href="#" @click.prevent="$emit('view-details', movieId, originalTitle)">{{ originalTitle }}</a> ({{ year || 'N/A'  }})</h5>
+      <h5><a href="#" @click.prevent="$emit('view-details', movieId, title)">{{ title }}</a> ({{ year || 'N/A'  }})</h5>
       <div>
         {{ voteAverage }}<span class="text-muted"><small>/10</small></span>
       </div>
     </div>
     <div class="row mb-2">
       <div class="col-md-4">
-        <img v-if="posterPath" :src="`https://image.tmdb.org/t/p/w500/${posterPath}`" class="img-fluid" :alt="originalTitle">
+        <img v-if="posterPath" :src="`https://image.tmdb.org/t/p/w500/${posterPath}`" class="img-fluid" :alt="title">
         <img v-else src="@/assets/not-available.png" class="img-fluid border" alt="Poster not available">
       </div>
       <div class="col-md-8">
@@ -41,7 +41,7 @@ export default {
       type: String,
       default: ''
     },
-    originalTitle: {
+    title: {
       type: String,
       default: ''
     },
