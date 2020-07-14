@@ -1,8 +1,10 @@
 <template>
-<div class="position-relative">
-  <div v-if="mode === 'search' && query && movies.length === 0" class="col">No results found</div>
-  <movies-loader v-if="loading || fetching" :style="{top: loading ? '1em' : 'auto' , bottom: fetching ? '2em' : 'auto'}" />
-  <div v-if="!loading" class="row" ref="list">
+<div>
+  <loader v-if="loading" />
+  <div v-if="mode === 'search' && query && movies.length === 0" class="col">
+    No results found
+  </div>
+  <div class="row">
     <div v-for="(movie, index) in movies" :key="`${movie.id}-${index}`" class="col-md-6">
       <movie-card
         :poster-path="movie.poster_path"
@@ -23,7 +25,7 @@ import { debounce } from 'lodash-es';
 import { fetchGenres } from '@/api/genres';
 import { fetchMovies, searchMovies } from '@/api/movies';
 import MovieCard from '@/components/MovieCard.vue';
-import MoviesLoader from '@/components/MoviesLoader.vue';
+import Loader from '@/components/Loader.vue';
 
 export default {
   props: {
@@ -40,36 +42,26 @@ export default {
     return {
       movies: [],
       genresMap: [],
-      loading: false,
-      fetching: false,
+      loading: true,
       page: 0,
       totalResults: 0
     };
   },
   components: {
-    MovieCard,
-    MoviesLoader
+    Loader,
+    MovieCard
   },
   watch: {
     query: {
       handler: async function(val, oldVal) {
         this.loading = true;
         const page = 1;
-        let res = {};
-        if (val) {
+        let res = { results: [], page: 0, total_results: 0 };
+        if (val !== '') {
           res = await searchMovies(this.query, page);
-        } else {
-          res.results = [];
         }
-        if (res.results.length) {
-          this.movies = res.results;
-          this.page = res.page;
-          this.totalResults = res.total_results;
-        } else {
-          this.movies = res.results;
-          this.page = 0;
-          this.totalResults = 0;
-        }
+        this.movies = res.results;
+        this.updatePagingInfo(res.page, res.total_results);
         this.loading = false;
       }
     }
@@ -77,16 +69,14 @@ export default {
   async mounted() {
     this.genresMap = await fetchGenres();
     if (this.mode === 'list') {
-      this.loading = true;
       const res = await fetchMovies(1);
       if (res.results.length) {
-        this.updateMoviesAndPagingInfo(res.results, res.page, res.total_results);
+        this.movies = this.movies.concat(res.results);
+        this.updatePagingInfo(res.page, res.total_results);
       }
-      this.loading = false;
     }
-    this.$nextTick(() => {
-      window.addEventListener('scroll', this.scrollHandler);
-    });
+    window.addEventListener('scroll', this.scrollHandler);
+    this.loading = false;
   },
   beforeDestroy() {
     window.removeEventListener('scroll', this.scrollHandler);
@@ -96,12 +86,11 @@ export default {
       return genreIds.map(id => this.genresMap[id]);
     },
     scrollHandler: debounce(async function() {
-      if (this.fetching || this.movies.length === this.totalResults) {
+      if (this.loading || this.movies.length === this.totalResults) {
         return;
       }
       if ((window.innerHeight + window.scrollY) >= document.body.scrollHeight) {
-        console.log(this.page);
-        this.fetching = true;
+        this.loading = true;
         const page = this.page + 1;
         let res = {};
         if (this.mode === 'list') {
@@ -110,13 +99,13 @@ export default {
           res = await searchMovies(this.query, page);
         }
         if (res.results.length) {
-          this.updateMoviesAndPagingInfo(res.results, res.page, res.total_results);
+          this.movies = this.movies.concat(res.results);
+          this.updatePagingInfo(res.results, res.page, res.total_results);
         }
-        this.fetching = false;
+        this.loading = false;
       }
     }, 150),
-    updateMoviesAndPagingInfo(movies, page, totalResults) {
-      this.movies = this.movies.concat(movies);
+    updatePagingInfo(page, totalResults) {
       this.page = page;
       this.totalResults = totalResults;
     }

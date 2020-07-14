@@ -1,8 +1,8 @@
 <template>
-  <div class="position-absolute loader-wrapper">
+  <div class="position-fixed loader-wrapper">
     <div class="alert alert-info d-flex align-items-center">
       <div class="dual-ring"></div>
-      <span>Fetching...</span>
+      <span>Loading...</span>
     </div>
   </div>
 </template>
@@ -28,9 +28,9 @@
     border-radius: 50%;
     border: 6px solid $info;
     border-color: $info transparent $info transparent;
-    animation: dual-ring 1.2s linear infinite;
+    animation: dual-ring-animation 1.2s linear infinite;
   }
-  @keyframes dual-ring {
+  @keyframes dual-ring-animation {
     0% {
       transform: rotate(0deg);
     }

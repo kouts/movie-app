@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h1 class="mb-4">Search</h1>
+    <h1 class="mb-4">Search a movie</h1>
     <div class="mb-4">
       <input type="text" v-model="search" class="form-control" @input="search = $event.target.value" placeholder="Enter a movie title to search..." />
     </div>
