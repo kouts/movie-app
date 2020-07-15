@@ -81,6 +81,26 @@ export default {
       }
     }
   },
+  created() {
+    this.scrollHandler = debounce(async() => {
+      if (this.loading || this.movies.length === this.totalResults) {
+        return;
+      }
+      if ((window.innerHeight + window.scrollY) >= document.body.scrollHeight) {
+        this.loading = true;
+        const nextPage = this.page + 1;
+        let res = {};
+        if (this.mode === 'list') {
+          res = await fetchMovies(nextPage);
+        } else if (this.mode === 'search') {
+          res = await searchMovies(this.query, nextPage);
+        }
+        this.movies = this.movies.concat(res.results);
+        this.updatePagingInfo(res.page, res.total_results);
+        this.loading = false;
+      }
+    }, 150);
+  },
   async mounted() {
     this.genresMap = await fetchGenres();
     if (this.mode === 'list') {
@@ -98,24 +118,6 @@ export default {
     getMovieGenres(genreIds) {
       return genreIds.map(id => this.genresMap[id]);
     },
-    scrollHandler: debounce(async function() {
-      if (this.loading || this.movies.length === this.totalResults) {
-        return;
-      }
-      if ((window.innerHeight + window.scrollY) >= document.body.scrollHeight) {
-        this.loading = true;
-        const nextPage = this.page + 1;
-        let res = {};
-        if (this.mode === 'list') {
-          res = await fetchMovies(nextPage);
-        } else if (this.mode === 'search') {
-          res = await searchMovies(this.query, nextPage);
-        }
-        this.movies = this.movies.concat(res.results);
-        this.updatePagingInfo(res.page, res.total_results);
-        this.loading = false;
-      }
-    }, 150),
     updatePagingInfo(page, totalResults) {
       this.page = page;
       this.totalResults = totalResults;
