@@ -16,7 +16,7 @@
     </tbody>
   </table>
   <div v-else>
-    No similar movies found.
+    No similar movies found
   </div>
 </div>
 </template>

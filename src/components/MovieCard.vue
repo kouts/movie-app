@@ -2,14 +2,14 @@
 <div class="card mb-3">
   <div class="card-body">
     <div class="d-flex flex-row justify-content-between">
-      <h5><a href="#" @click.prevent="$emit('view-details', movieId)">{{ title }}</a> ({{ year || 'N/A'  }})</h5>
+      <h5><a href="#" @click.prevent="$emit('view-details', movieId)">{{ title }}</a> {{ year && `(${year})` }}</h5>
       <div>
         {{ voteAverage }}<span class="text-muted"><small>/10</small></span>
       </div>
     </div>
     <div class="row mb-2">
       <div class="col-md-4 text-center">
-        <movie-image :path="posterPath" :title="title" />
+        <movie-image :path="posterPath" :title="title" style="cursor: pointer" @click.native="$emit('view-details', movieId)" />
       </div>
       <div class="col-md-8">
         <div :class="['overview-box', expanded && 'is-expanded']" ref="overviewBox">
@@ -21,8 +21,7 @@
     </div>
     <div class="row">
       <div class="col-md-12">
-        Genres: <span v-for="(genre, index) in genres" :key="index" class="badge badge-pill badge-info ml-1">{{ genre }}</span>
-        <span v-if="genres.length === 0" class="text-muted">N/A</span>
+        <movie-genres :genres="genres"/>
       </div>
     </div>
   </div>
@@ -32,6 +31,7 @@
 <script>
 import { getYearFromIsoDate } from '@/common/utils';
 import MovieImage from '@/components/MovieImage.vue';
+import MovieGenres from '@/components/MovieGenres.vue';
 
 export default {
   props: {
@@ -65,10 +65,11 @@ export default {
     }
   },
   components: {
-    MovieImage
+    MovieImage,
+    MovieGenres
   },
   computed: {
-    year: function() {
+    year() {
       return getYearFromIsoDate(this.releaseDate);
     }
   },

@@ -23,7 +23,7 @@
     </div>
   </div>
   <div v-else>
-    No reviews found.
+    No reviews found
   </div>
 </div>
 </template>

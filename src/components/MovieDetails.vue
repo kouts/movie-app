@@ -2,7 +2,7 @@
 <div>
   <modal
     v-model="open"
-    :title="`${movieTitle} (${year || 'N/A'})`"
+    :title="`${movieTitle} ${year ? '(' + year + ')' : ''}`"
     modal-class="movie-details-modal"
     @beforeOpen="beforeModalOpen"
     @afterOpen="afterModalOpen"
@@ -10,7 +10,7 @@
   >
     <ul class="nav nav-tabs mt-1">
       <li class="nav-item position-relative">
-        <a :class="['nav-link', tabActive === 'trailer' && 'active']" href="#" @click="tabActive = 'trailer'">Trailer</a>
+        <a :class="['nav-link', tabActive === 'overview' && 'active']" href="#" @click="tabActive = 'overview'">Overview</a>
       </li>
       <li class="nav-item position-relative">
         <a :class="['nav-link', tabActive === 'reviews' && 'active']" href="#" @click="tabActive = 'reviews'">
@@ -26,8 +26,21 @@
     <div v-if="loading" class="d-flex position-relative">
       <loader style="position: absolute; top: 85px;" />
     </div>
-    <div v-else class="pt-3">
-      <movie-trailer v-show="tabActive === 'trailer'" :video-id="trailer.key" />
+    <div v-else class="pt-2">
+      <movie-overview
+        v-show="tabActive === 'overview'"
+        :title="movie.title"
+        :year="year"
+        :vote-average="movie.vote_average"
+        :votes="movie.vote_count"
+        :release-iso-date="movie.release_date"
+        :duration-in-mins="movie.runtime"
+        :language="movie.original_language"
+        :genres="getMovieGenres(movie.genres)"
+        :poster-path="movie.poster_path"
+        :trailer-key="trailer.key"
+        :overview="movie.overview"
+      />
       <movie-reviews v-show="tabActive === 'reviews'" :reviews="reviews" />
       <movie-similar-movies v-show="tabActive === 'similarMovies'" :movies="similarMovies" />
     </div>
@@ -38,10 +51,10 @@
 <script>
 import Modal from '@kouts/vue-modal';
 import Loader from '@/components/Loader.vue';
-import MovieTrailer from '@/components/MovieTrailer.vue';
+import MovieOverview from '@/components/MovieOverview.vue';
 import MovieReviews from '@/components/MovieReviews.vue';
 import MovieSimilarMovies from '@/components/MovieSimilarMovies.vue';
-import { isEmptyObject, getYearFromIsoDate } from '@/common/utils';
+import { getYearFromIsoDate } from '@/common/utils';
 import { fetchMovie, fetchMovieVideos, fetchMovieReviews, fetchMovieSimilarMovies } from '@/api/movies';
 
 export default {
@@ -70,7 +83,7 @@ export default {
       trailer: {},
       reviews: [],
       similarMovies: [],
-      tabActive: 'trailer' // trailer, reviews, similarMovies
+      tabActive: 'overview' // overview, reviews, similarMovies
     };
   },
   computed: {
@@ -84,7 +97,7 @@ export default {
         }
       }
     },
-    year: function() {
+    year() {
       return getYearFromIsoDate(this.movieReleaseDate);
     }
   },
@@ -92,9 +105,6 @@ export default {
     tabActive: {
       handler: async function(val, oldVal) {
         this.loading = true;
-        if (val === 'trailer' && isEmptyObject(this.trailer)) {
-          this.trailer = await this.fetchMovieTrailer();
-        }
         if (val === 'reviews' && this.reviews.length === 0) {
           this.reviews = await fetchMovieReviews(this.movieId).then(data => data.results.slice(0, 2));
         }
@@ -108,7 +118,7 @@ export default {
   components: {
     Modal,
     Loader,
-    MovieTrailer,
+    MovieOverview,
     MovieReviews,
     MovieSimilarMovies
   },
@@ -132,12 +142,15 @@ export default {
       this.trailer = {};
       this.reviews = [];
       this.similarMovies = [];
-      this.tabActive = 'trailer';
+      this.tabActive = 'overview';
     },
     fetchMovieTrailer() {
       return fetchMovieVideos(this.movieId).then(data => {
         return data.results.filter(o => o.type === 'Trailer' && o.site === 'YouTube')[0] || {};
       });
+    },
+    getMovieGenres(genresArrayOfObj) {
+      return genresArrayOfObj.map(o => o.name);
     }
   }
 };
@@ -147,5 +160,9 @@ export default {
 .movie-details-modal {
   max-width: 900px;
   min-height: 250px;
+}
+.movie-votes-box {
+  line-height: 1em;
+  text-align: center;
 }
 </style>
