@@ -1,3 +1,7 @@
-export const chop = function(str, n) {
-  return str.length > n ? str.substr(0, n - 1) + '...' : str;
+export const clone = function(obj) {
+  return JSON.parse(JSON.stringify(obj));
+};
+
+export const getYearFromIsoDate = function(isoDate) {
+  return isoDate.split('-')[0];
 };

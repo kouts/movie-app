@@ -2,7 +2,7 @@
 <div class="card mb-3">
   <div class="card-body">
     <div class="d-flex flex-row justify-content-between">
-      <h5><a href="#" @click.prevent="$emit('view-details', movieId, title)">{{ title }}</a> ({{ year || 'N/A'  }})</h5>
+      <h5><a href="#" @click.prevent="$emit('view-details', movieId)">{{ title }}</a> ({{ year || 'N/A'  }})</h5>
       <div>
         {{ voteAverage }}<span class="text-muted"><small>/10</small></span>
       </div>
@@ -31,6 +31,8 @@
 </template>
 
 <script>
+import { getYearFromIsoDate } from '@/common/utils';
+
 export default {
   props: {
     movieId: {
@@ -64,7 +66,7 @@ export default {
   },
   computed: {
     year: function() {
-      return this.releaseDate.split('-')[0];
+      return getYearFromIsoDate(this.releaseDate);
     }
   },
   data: function() {

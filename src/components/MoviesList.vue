@@ -4,6 +4,7 @@
     :show-modal="showDetailsModal"
     :movie-id="selectedMovieId"
     :movie-title="selectedMovieTitle"
+    :movie-release-date="selectedMovieReleaseDate"
     @modal-closed="showDetailsModal = false"
   />
   <loader v-if="loading" />
@@ -59,7 +60,8 @@ export default {
       totalResults: 0,
       showDetailsModal: false,
       selectedMovieId: null,
-      selectedMovieTitle: ''
+      selectedMovieTitle: '',
+      selectedMovieReleaseDate: null
     };
   },
   components: {
@@ -122,9 +124,11 @@ export default {
       this.page = page;
       this.totalResults = totalResults;
     },
-    viewDetails(movieId, title) {
-      this.selectedMovieId = movieId;
-      this.selectedMovieTitle = title;
+    viewDetails(movieId) {
+      const selectedMovie = this.movies.find(movie => movie.id === movieId);
+      this.selectedMovieId = selectedMovie.id;
+      this.selectedMovieTitle = selectedMovie.title;
+      this.selectedMovieReleaseDate = selectedMovie.release_date;
       this.showDetailsModal = true;
     }
   }

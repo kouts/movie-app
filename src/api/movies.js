@@ -18,3 +18,27 @@ export function searchMovies(query, page) {
     }
   });
 };
+
+export function fetchMovie(movieId) {
+  return request({
+    url: 'movie/' + movieId
+  });
+};
+
+export function fetchMovieVideos(movieId) {
+  return request({
+    url: 'movie/' + movieId + '/videos'
+  });
+};
+
+export function fetchMovieReviews(movieId) {
+  return request({
+    url: 'movie/' + movieId + '/reviews'
+  });
+};
+
+export function fetchMovieSimilarMovies(movieId) {
+  return request({
+    url: 'movie/' + movieId + '/similar'
+  });
+};
