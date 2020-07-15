@@ -1,6 +1,6 @@
 <template>
   <div>
-    <table v-if="movies.length !==0" class="table table-sm table-striped">
+    <table v-if="movies.length !==0" class="table table-sm table-striped mb-0">
       <thead>
         <tr>
           <th scope="col" class="border-top-0">Titles</th>
