@@ -10,16 +10,16 @@
     >
       <ul class="nav nav-tabs mt-1">
         <li class="nav-item position-relative">
-          <a :class="['nav-link', tabActive === 1 && 'active']" href="#" @click="tabActive = 1">Trailer</a>
+          <a :class="['nav-link', tabActive === 'trailer' && 'active']" href="#" @click="tabActive = 'trailer'">Trailer</a>
         </li>
         <li class="nav-item position-relative">
-          <a :class="['nav-link', tabActive === 2 && 'active']" href="#" @click="tabActive = 2">
-            Reviews <span :class="['badge badge-tab', tabActive === 2 ? 'badge-primary' : 'badge-secondary']">{{reviews.length}}</span>
+          <a :class="['nav-link', tabActive === 'reviews' && 'active']" href="#" @click="tabActive = 'reviews'">
+            Reviews
           </a>
         </li>
         <li class="nav-item position-relative">
-          <a :class="['nav-link', tabActive === 3 && 'active']" href="#" @click="tabActive = 3">
-            Similar movies <span :class="['badge badge-tab', tabActive === 3 ? 'badge-primary' : 'badge-secondary']">{{similarMovies.length}}</span>
+          <a :class="['nav-link', tabActive === 'similarMovies' && 'active']" href="#" @click="tabActive = 'similarMovies'">
+            Similar movies
           </a>
         </li>
       </ul>
@@ -27,9 +27,9 @@
         <loader style="position: absolute; top: 85px;" />
       </div>
       <div v-else class="pt-3">
-        <movie-trailer v-show="tabActive === 1" :video-id="trailer.key" />
-        <movie-reviews v-show="tabActive === 2" :reviews="reviews" />
-        <movie-similar-movies v-show="tabActive === 3" :movies="similarMovies" />
+        <movie-trailer v-show="tabActive === 'trailer'" :video-id="trailer.key" />
+        <movie-reviews v-show="tabActive === 'reviews'" :reviews="reviews" />
+        <movie-similar-movies v-show="tabActive === 'similarMovies'" :movies="similarMovies" />
       </div>
     </modal>
   </div>
@@ -41,7 +41,7 @@ import Loader from '@/components/Loader.vue';
 import MovieTrailer from '@/components/MovieTrailer.vue';
 import MovieReviews from '@/components/MovieReviews.vue';
 import MovieSimilarMovies from '@/components/MovieSimilarMovies.vue';
-import { getYearFromIsoDate } from '@/common/utils';
+import { isEmptyObject, getYearFromIsoDate } from '@/common/utils';
 import { fetchMovie, fetchMovieVideos, fetchMovieReviews, fetchMovieSimilarMovies } from '@/api/movies';
 
 export default {
@@ -70,7 +70,7 @@ export default {
       trailer: {},
       reviews: [],
       similarMovies: [],
-      tabActive: 1
+      tabActive: 'trailer' // trailer, reviews, similarMovies
     };
   },
   computed: {
@@ -88,6 +88,23 @@ export default {
       return getYearFromIsoDate(this.movieReleaseDate);
     }
   },
+  watch: {
+    tabActive: {
+      handler: async function(val, oldVal) {
+        this.loading = true;
+        if (val === 'trailer' && isEmptyObject(this.trailer)) {
+          this.trailer = await this.fetchMovieTrailer();
+        }
+        if (val === 'reviews' && this.reviews.length === 0) {
+          this.reviews = await fetchMovieReviews(this.movieId).then(data => data.results.slice(0, 2));
+        }
+        if (val === 'similarMovies' && this.similarMovies.length === 0) {
+          this.similarMovies = await fetchMovieSimilarMovies(this.movieId).then(data => data.results);
+        }
+        this.loading = false;
+      }
+    }
+  },
   components: {
     Modal,
     Loader,
@@ -99,11 +116,9 @@ export default {
     async beforeModalOpen() {
       this.loading = true;
       this.initializeModalState();
-      const data = await this.fetchMovieDetails();
+      const data = await Promise.all([fetchMovie(this.movieId), this.fetchMovieTrailer()]);
       this.movie = data[0];
-      this.trailer = data[1].results.filter(o => o.type === 'Trailer' && o.site === 'YouTube')[0] || {};
-      this.reviews = data[2].results.slice(0, 2);
-      this.similarMovies = data[3].results;
+      this.trailer = data[1];
       this.loading = false;
     },
     afterModalOpen() {
@@ -117,15 +132,12 @@ export default {
       this.trailer = {};
       this.reviews = [];
       this.similarMovies = [];
-      this.tabActive = 1;
+      this.tabActive = 'trailer';
     },
-    fetchMovieDetails() {
-      return Promise.all([
-        fetchMovie(this.movieId),
-        fetchMovieVideos(this.movieId),
-        fetchMovieReviews(this.movieId),
-        fetchMovieSimilarMovies(this.movieId)
-      ]);
+    fetchMovieTrailer() {
+      return fetchMovieVideos(this.movieId).then(data => {
+        return data.results.filter(o => o.type === 'Trailer' && o.site === 'YouTube')[0] || {};
+      });
     }
   }
 };

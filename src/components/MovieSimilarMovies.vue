@@ -9,7 +9,7 @@
       <tbody>
         <tr v-for="movie in movies" :key="movie.id">
           <td>
-            <img v-if="movie.poster_path" :src="`https://image.tmdb.org/t/p/w500/${movie.poster_path}`" class="img-thumbnail" :alt="title" style="width: 48px;">
+            <img v-if="movie.poster_path" :src="`https://image.tmdb.org/t/p/w500/${movie.poster_path}`" class="img-thumbnail" :alt="movie.title" style="width: 48px;">
             <img v-else src="@/assets/not-available.png" class="img-fluid border" alt="Poster not available">
             {{ movie.title }}
           </td>
