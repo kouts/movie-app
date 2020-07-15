@@ -23,30 +23,13 @@
           </a>
         </li>
       </ul>
-
       <div v-if="loading" class="d-flex position-relative">
         <loader style="position: absolute; top: 85px;" />
       </div>
       <div v-else class="pt-3">
-        <div v-show="tabActive === 1">
-          <div v-if="trailer.key" class="embed-responsive embed-responsive-16by9">
-            <iframe class="embed-responsive-item" :src="`https://www.youtube.com/embed/${trailer.key}?rel=0`" allowfullscreen></iframe>
-          </div>
-          <div v-else>
-            No trailer found.
-          </div>
-        </div>
-        <div v-show="tabActive === 2">
-          <movie-reviews :reviews="reviews" />
-        </div>
-        <div v-show="tabActive === 3">
-          <div v-if="similarMovies.length !== 0">
-            Similar movies here
-          </div>
-          <div v-else>
-            No similar movies found.
-          </div>
-        </div>
+        <movie-trailer v-show="tabActive === 1" :video-id="trailer.key" />
+        <movie-reviews v-show="tabActive === 2" :reviews="reviews" />
+        <movie-similar-movies v-show="tabActive === 3" :movies="similarMovies" />
       </div>
     </modal>
   </div>
@@ -55,7 +38,9 @@
 <script>
 import Modal from '@kouts/vue-modal';
 import Loader from '@/components/Loader.vue';
+import MovieTrailer from '@/components/MovieTrailer.vue';
 import MovieReviews from '@/components/MovieReviews.vue';
+import MovieSimilarMovies from '@/components/MovieSimilarMovies.vue';
 import { getYearFromIsoDate } from '@/common/utils';
 import { fetchMovie, fetchMovieVideos, fetchMovieReviews, fetchMovieSimilarMovies } from '@/api/movies';
 
@@ -106,7 +91,9 @@ export default {
   components: {
     Modal,
     Loader,
-    MovieReviews
+    MovieTrailer,
+    MovieReviews,
+    MovieSimilarMovies
   },
   methods: {
     async beforeModalOpen() {
