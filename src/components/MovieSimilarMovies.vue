@@ -9,9 +9,8 @@
       <tbody>
         <tr v-for="movie in movies" :key="movie.id">
           <td>
-            <img v-if="movie.poster_path" :src="`https://image.tmdb.org/t/p/w500/${movie.poster_path}`" class="img-thumbnail" :alt="movie.title" style="width: 48px;">
-            <img v-else src="@/assets/not-available.png" class="img-fluid border" alt="Poster not available">
-            {{ movie.title }}
+            <movie-image :path="movie.poster_path" :title="movie.title" widthApi="w92" width="46px" posterClass="img-thumbnail" class="d-inline-block" />
+            {{ movie.title }} ({{ getYearFromIsoDate(movie.release_date) || 'N/A' }})
           </td>
         </tr>
       </tbody>
@@ -23,11 +22,22 @@
 </template>
 
 <script>
+import MovieImage from '@/components/MovieImage.vue';
+import { getYearFromIsoDate } from '@/common/utils';
+
 export default {
   props: {
     movies: {
       type: Array,
       default: () => []
+    }
+  },
+  components: {
+    MovieImage
+  },
+  methods: {
+    getYearFromIsoDate(isoDate) {
+      return getYearFromIsoDate(isoDate);
     }
   }
 };

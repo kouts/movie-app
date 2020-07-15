@@ -8,9 +8,8 @@
       </div>
     </div>
     <div class="row mb-2">
-      <div class="col-md-4">
-        <img v-if="posterPath" :src="`https://image.tmdb.org/t/p/w500/${posterPath}`" class="img-fluid" :alt="title">
-        <img v-else src="@/assets/not-available.png" class="img-fluid border" alt="Poster not available">
+      <div class="col-md-4 text-center">
+        <movie-image :path="posterPath" :title="title" />
       </div>
       <div class="col-md-8">
         <div :class="['overview-box', expanded && 'is-expanded']" ref="overviewBox">
@@ -32,6 +31,7 @@
 
 <script>
 import { getYearFromIsoDate } from '@/common/utils';
+import MovieImage from '@/components/MovieImage.vue';
 
 export default {
   props: {
@@ -63,6 +63,9 @@ export default {
       type: String,
       default: ''
     }
+  },
+  components: {
+    MovieImage
   },
   computed: {
     year: function() {

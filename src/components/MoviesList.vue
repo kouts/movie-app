@@ -88,7 +88,7 @@ export default {
       if (this.loading || this.movies.length === this.totalResults) {
         return;
       }
-      if ((window.innerHeight + window.scrollY) >= document.body.scrollHeight) {
+      if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight - 2) {
         this.loading = true;
         const nextPage = this.page + 1;
         let res = {};
@@ -104,12 +104,26 @@ export default {
     }, 150);
   },
   async mounted() {
+    /*
     this.genresMap = await fetchGenres();
     if (this.mode === 'list') {
       const res = await fetchMovies(1);
       this.movies = this.movies.concat(res.results);
       this.updatePagingInfo(res.page, res.total_results);
     }
+    */
+    const data = await Promise.all([
+      fetchGenres(),
+      this.mode === 'list' ? fetchMovies(1) : Promise.resolve({
+        results: [],
+        page: 0,
+        total_results: 0
+      })
+    ]);
+    this.genresMap = data[0];
+    this.movies = this.movies.concat(data[1].results);
+    this.updatePagingInfo(data[1].page, data[1].total_results);
+
     window.addEventListener('scroll', this.scrollHandler);
     this.loading = false;
   },
