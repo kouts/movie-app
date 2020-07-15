@@ -1,38 +1,38 @@
 <template>
-  <div>
-    <modal
-      v-model="open"
-      :title="`${movieTitle} (${year || 'N/A'})`"
-      modal-class="movie-details-modal"
-      @beforeOpen="beforeModalOpen"
-      @afterOpen="afterModalOpen"
-      @closing="closingModal"
-    >
-      <ul class="nav nav-tabs mt-1">
-        <li class="nav-item position-relative">
-          <a :class="['nav-link', tabActive === 'trailer' && 'active']" href="#" @click="tabActive = 'trailer'">Trailer</a>
-        </li>
-        <li class="nav-item position-relative">
-          <a :class="['nav-link', tabActive === 'reviews' && 'active']" href="#" @click="tabActive = 'reviews'">
-            Reviews
-          </a>
-        </li>
-        <li class="nav-item position-relative">
-          <a :class="['nav-link', tabActive === 'similarMovies' && 'active']" href="#" @click="tabActive = 'similarMovies'">
-            Similar movies
-          </a>
-        </li>
-      </ul>
-      <div v-if="loading" class="d-flex position-relative">
-        <loader style="position: absolute; top: 85px;" />
-      </div>
-      <div v-else class="pt-3">
-        <movie-trailer v-show="tabActive === 'trailer'" :video-id="trailer.key" />
-        <movie-reviews v-show="tabActive === 'reviews'" :reviews="reviews" />
-        <movie-similar-movies v-show="tabActive === 'similarMovies'" :movies="similarMovies" />
-      </div>
-    </modal>
-  </div>
+<div>
+  <modal
+    v-model="open"
+    :title="`${movieTitle} (${year || 'N/A'})`"
+    modal-class="movie-details-modal"
+    @beforeOpen="beforeModalOpen"
+    @afterOpen="afterModalOpen"
+    @closing="closingModal"
+  >
+    <ul class="nav nav-tabs mt-1">
+      <li class="nav-item position-relative">
+        <a :class="['nav-link', tabActive === 'trailer' && 'active']" href="#" @click="tabActive = 'trailer'">Trailer</a>
+      </li>
+      <li class="nav-item position-relative">
+        <a :class="['nav-link', tabActive === 'reviews' && 'active']" href="#" @click="tabActive = 'reviews'">
+          Reviews
+        </a>
+      </li>
+      <li class="nav-item position-relative">
+        <a :class="['nav-link', tabActive === 'similarMovies' && 'active']" href="#" @click="tabActive = 'similarMovies'">
+          Similar movies
+        </a>
+      </li>
+    </ul>
+    <div v-if="loading" class="d-flex position-relative">
+      <loader style="position: absolute; top: 85px;" />
+    </div>
+    <div v-else class="pt-3">
+      <movie-trailer v-show="tabActive === 'trailer'" :video-id="trailer.key" />
+      <movie-reviews v-show="tabActive === 'reviews'" :reviews="reviews" />
+      <movie-similar-movies v-show="tabActive === 'similarMovies'" :movies="similarMovies" />
+    </div>
+  </modal>
+</div>
 </template>
 
 <script>
@@ -144,14 +144,8 @@ export default {
 </script>
 
 <style lang="scss">
-  .movie-details-modal {
-    max-width: 900px;
-    min-height: 250px;
-  }
-  .badge-tab {
-    position: absolute;
-    z-index: 1;
-    right: -0.6em;
-    top: -0.6em;
-  }
+.movie-details-modal {
+  max-width: 900px;
+  min-height: 250px;
+}
 </style>

@@ -90,24 +90,24 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .overview-box {
-    overflow: hidden;
-    max-height: 170px;
-  }
-  .overview-box.is-expanded {
-    max-height: none;
-  }
-  .show-more {
-    text-align: center;
-    cursor: pointer;
-    padding: 25px 8px 12px 8px;
-    font-size: 0.9em;
-    position: relative;
-    z-index: 1;
-    margin-top: -25px;
-    background-image: linear-gradient(to bottom, rgba(255,255,255,0.3) 0%, #fff 40%, #fff 100%);
-  }
-  .show-more.is-on {
-    background-image:none;
-  }
+.overview-box {
+  overflow: hidden;
+  max-height: 170px;
+}
+.overview-box.is-expanded {
+  max-height: none;
+}
+.show-more {
+  text-align: center;
+  cursor: pointer;
+  padding: 25px 8px 12px 8px;
+  font-size: 0.9em;
+  position: relative;
+  z-index: 1;
+  margin-top: -25px;
+  background-image: linear-gradient(to bottom, rgba(255,255,255,0.3) 0%, #fff 40%, #fff 100%);
+}
+.show-more.is-on {
+  background-image:none;
+}
 </style>
