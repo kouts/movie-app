@@ -1,5 +1,5 @@
 <template>
-  <div class="position-fixed loader-wrapper">
+  <div class="loader-wrapper">
     <div class="alert alert-info d-flex align-items-center">
       <div class="dual-ring"></div>
       <span>Loading...</span>
@@ -9,6 +9,7 @@
 
 <style lang="scss" scoped>
   .loader-wrapper {
+    position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);

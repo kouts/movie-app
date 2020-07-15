@@ -5,8 +5,10 @@
       :title="`${movieTitle} (${year || 'N/A'})`"
       modal-class="movie-details-modal"
       @beforeOpen="beforeModalOpen"
+      @afterOpen="afterModalOpen"
+      @closing="closingModal"
     >
-      <ul class="nav nav-tabs">
+      <ul class="nav nav-tabs mt-1">
         <li class="nav-item position-relative">
           <a :class="['nav-link', tabActive === 1 && 'active']" href="#" @click="tabActive = 1">Trailer</a>
         </li>
@@ -22,25 +24,28 @@
         </li>
       </ul>
 
-      <div v-if="!loading" class="pt-3">
+      <div v-if="loading" class="d-flex position-relative">
+        <loader style="position: absolute; top: 85px;" />
+      </div>
+      <div v-else class="pt-3">
         <div v-show="tabActive === 1">
           <div v-if="trailer.key" class="embed-responsive embed-responsive-16by9">
             <iframe class="embed-responsive-item" :src="`https://www.youtube.com/embed/${trailer.key}?rel=0`" allowfullscreen></iframe>
           </div>
           <div v-else>
-            No trailer found for this movie
+            No trailer found.
           </div>
         </div>
         <div v-show="tabActive === 2">
-          <div v-if="reviews.length !== 0">
-
-          </div>
-          <div v-else>
-            No reviews found for this movie
-          </div>
+          <movie-reviews :reviews="reviews" />
         </div>
         <div v-show="tabActive === 3">
-          Similar movies
+          <div v-if="similarMovies.length !== 0">
+            Similar movies here
+          </div>
+          <div v-else>
+            No similar movies found.
+          </div>
         </div>
       </div>
     </modal>
@@ -49,6 +54,8 @@
 
 <script>
 import Modal from '@kouts/vue-modal';
+import Loader from '@/components/Loader.vue';
+import MovieReviews from '@/components/MovieReviews.vue';
 import { getYearFromIsoDate } from '@/common/utils';
 import { fetchMovie, fetchMovieVideos, fetchMovieReviews, fetchMovieSimilarMovies } from '@/api/movies';
 
@@ -97,7 +104,9 @@ export default {
     }
   },
   components: {
-    Modal
+    Modal,
+    Loader,
+    MovieReviews
   },
   methods: {
     async beforeModalOpen() {
@@ -106,9 +115,15 @@ export default {
       const data = await this.fetchMovieDetails();
       this.movie = data[0];
       this.trailer = data[1].results.filter(o => o.type === 'Trailer' && o.site === 'YouTube')[0] || {};
-      this.reviews = data[2].results;
+      this.reviews = data[2].results.slice(0, 2);
       this.similarMovies = data[3].results;
       this.loading = false;
+    },
+    afterModalOpen() {
+      document.body.classList.add('overflow-hidden');
+    },
+    closingModal() {
+      document.body.classList.remove('overflow-hidden');
     },
     initializeModalState() {
       this.movie = {};

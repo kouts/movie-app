@@ -3,5 +3,5 @@ export const clone = function(obj) {
 };
 
 export const getYearFromIsoDate = function(isoDate) {
-  return isoDate.split('-')[0];
+  return isoDate ? isoDate.split('-')[0] : null;
 };
