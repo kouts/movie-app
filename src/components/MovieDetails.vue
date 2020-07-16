@@ -150,7 +150,7 @@ export default {
       });
     },
     getMovieGenres(genresArrayOfObj) {
-      return genresArrayOfObj.map(o => o.name);
+      return genresArrayOfObj ? genresArrayOfObj.map(o => o.name) : [];
     }
   }
 };
