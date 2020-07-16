@@ -29,16 +29,22 @@
   <div class="font-weight-bold text-center mt-4" v-if="movies.length === totalResults && totalResults > 0">
     There are no more results to display
   </div>
+  <scroll-to-load
+    :fetcher="fetchData"
+    :isDisabled="this.movies.length === this.totalResults"
+    @fetch-start="loading = true"
+    @fetch-end="fetchEnd"
+  />
 </div>
 </template>
 
 <script>
-import { debounce } from 'lodash-es';
 import { fetchGenres } from '@/api/genres';
 import { fetchMovies, searchMovies } from '@/api/movies';
 import MovieCard from '@/components/MovieCard.vue';
 import MovieDetails from '@/components/MovieDetails.vue';
 import Loader from '@/components/Loader.vue';
+import ScrollToLoad from '@/components/ScrollToLoad';
 
 export default {
   props: {
@@ -67,7 +73,8 @@ export default {
   components: {
     Loader,
     MovieCard,
-    MovieDetails
+    MovieDetails,
+    ScrollToLoad
   },
   watch: {
     query: {
@@ -83,35 +90,7 @@ export default {
       }
     }
   },
-  created() {
-    this.scrollHandler = debounce(async() => {
-      if (this.loading || this.movies.length === this.totalResults) {
-        return;
-      }
-      if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight - 2) {
-        this.loading = true;
-        const nextPage = this.page + 1;
-        let res = {};
-        if (this.mode === 'list') {
-          res = await fetchMovies(nextPage);
-        } else if (this.mode === 'search') {
-          res = await searchMovies(this.query, nextPage);
-        }
-        this.movies = this.movies.concat(res.results);
-        this.updatePagingInfo(res.page, res.total_results);
-        this.loading = false;
-      }
-    }, 150);
-  },
   async mounted() {
-    /*
-    this.genresMap = await fetchGenres();
-    if (this.mode === 'list') {
-      const res = await fetchMovies(1);
-      this.movies = this.movies.concat(res.results);
-      this.updatePagingInfo(res.page, res.total_results);
-    }
-    */
     const data = await Promise.all([
       fetchGenres(),
       this.mode === 'list' ? fetchMovies(1) : Promise.resolve({
@@ -123,14 +102,22 @@ export default {
     this.genresMap = data[0];
     this.movies = this.movies.concat(data[1].results);
     this.updatePagingInfo(data[1].page, data[1].total_results);
-
-    window.addEventListener('scroll', this.scrollHandler);
     this.loading = false;
   },
-  beforeDestroy() {
-    window.removeEventListener('scroll', this.scrollHandler);
-  },
   methods: {
+    fetchData() {
+      const nextPage = this.page + 1;
+      if (this.mode === 'list') {
+        return fetchMovies(nextPage);
+      } else if (this.mode === 'search') {
+        return searchMovies(this.query, nextPage);
+      }
+    },
+    fetchEnd(res) {
+      this.movies = this.movies.concat(res.results);
+      this.updatePagingInfo(res.page, res.total_results);
+      this.loading = false;
+    },
     getMovieGenres(genreIds) {
       return genreIds.map(id => this.genresMap[id]);
     },
