@@ -22,10 +22,8 @@
         </a>
       </li>
     </ul>
-    <div v-if="loading" class="d-flex position-relative">
-      <loader style="position: absolute; top: 85px;" />
-    </div>
-    <div v-else class="pt-2">
+    <loader v-if="loading" style="top: 11.5em;" />
+    <div class="pt-2">
       <movie-overview
         v-show="tabActive === 'overview'"
         :title="movie.title"
@@ -41,8 +39,15 @@
         :overview="movie.overview"
       />
       <movie-reviews v-show="tabActive === 'reviews'" :reviews="reviews" class="mt-2" />
-      <movie-similar-movies v-show="tabActive === 'similarMovies'" :movies="similarMovies" />
+      <movie-similar-movies v-show="tabActive === 'similarMovies'" :movies="similarMovies" :page="page" :total-results="totalResults" />
     </div>
+    <scroll-to-load
+      scrollTarget=".vm-wrapper"
+      :fetcher="fetchSimilarMovies"
+      :isDisabled="this.similarMovies.length === this.totalResults"
+      @fetch-start="loading = true"
+      @fetch-end="fetchEnd"
+    />
     <go-to-top scrollTarget=".vm-wrapper" style="right: 40px;" />
   </modal>
 </template>
@@ -54,6 +59,7 @@ import MovieOverview from '@/components/MovieOverview.vue';
 import MovieReviews from '@/components/MovieReviews.vue';
 import MovieSimilarMovies from '@/components/MovieSimilarMovies.vue';
 import GoToTop from '@/layouts/components/GoToTop.vue';
+import ScrollToLoad from '@/components/ScrollToLoad';
 import { getYearFromIsoDate } from '@/common/utils';
 import { fetchMovie, fetchMovieVideos, fetchMovieReviews, fetchMovieSimilarMovies } from '@/api/movies';
 
@@ -78,12 +84,14 @@ export default {
   },
   data() {
     return {
+      tabActive: 'overview', // overview, reviews, similarMovies
       loading: true,
       movie: {},
       trailer: {},
       reviews: [],
       similarMovies: [],
-      tabActive: 'overview' // overview, reviews, similarMovies
+      page: 0,
+      totalResults: 0
     };
   },
   computed: {
@@ -109,7 +117,10 @@ export default {
           this.reviews = await fetchMovieReviews(this.movieId).then(data => data.results.slice(0, 2));
         }
         if (val === 'similarMovies' && this.similarMovies.length === 0) {
-          this.similarMovies = await fetchMovieSimilarMovies(this.movieId).then(data => data.results);
+          const res = await this.fetchSimilarMovies();
+          this.similarMovies = res.results;
+          this.page = res.page;
+          this.totalResults = res.total_results;
         }
         this.loading = false;
       }
@@ -121,7 +132,8 @@ export default {
     MovieOverview,
     MovieReviews,
     MovieSimilarMovies,
-    GoToTop
+    GoToTop,
+    ScrollToLoad
   },
   methods: {
     async beforeModalOpen() {
@@ -149,6 +161,16 @@ export default {
       return fetchMovieVideos(this.movieId).then(data => {
         return data.results.filter(o => o.type === 'Trailer' && o.site === 'YouTube')[0] || {};
       });
+    },
+    fetchSimilarMovies() {
+      const nextPage = this.page + 1;
+      return fetchMovieSimilarMovies(this.movieId, nextPage);
+    },
+    fetchEnd(res) {
+      this.similarMovies = this.similarMovies.concat(res.results);
+      this.page = res.page;
+      this.totalResults = res.total_results;
+      this.loading = false;
     },
     getMovieGenres(genresArrayOfObj) {
       return genresArrayOfObj ? genresArrayOfObj.map(o => o.name) : [];

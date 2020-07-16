@@ -37,8 +37,11 @@ export const fetchMovieReviews = (movieId) => {
   });
 };
 
-export const fetchMovieSimilarMovies = (movieId) => {
+export const fetchMovieSimilarMovies = (movieId, page) => {
   return request({
-    url: 'movie/' + movieId + '/similar'
+    url: 'movie/' + movieId + '/similar',
+    params: {
+      page: page
+    }
   });
 };
