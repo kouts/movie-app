@@ -41,7 +41,7 @@
         :trailer-key="trailer.key"
         :overview="movie.overview"
       />
-      <movie-reviews v-show="tabActive === 'reviews'" :reviews="reviews" />
+      <movie-reviews v-show="tabActive === 'reviews'" :reviews="reviews" class="mt-2" />
       <movie-similar-movies v-show="tabActive === 'similarMovies'" :movies="similarMovies" />
     </div>
   </modal>
