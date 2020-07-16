@@ -5,18 +5,21 @@
       <input type="text" :value="search" ref="search" class="form-control" @input="searchHandler($event)" placeholder="Enter a movie title to search..." />
     </div>
     <movies-list mode="search" :query="search" />
+    <go-to-top />
   </div>
 </template>
 
 <script>
 import { debounce } from 'lodash-es';
+import GoToTop from '@/components/GoToTop.vue';
 import MoviesList from '@/components/MoviesList.vue';
 
 export default {
   components: {
+    GoToTop,
     MoviesList
   },
-  data: function() {
+  data() {
     return {
       search: ''
     };

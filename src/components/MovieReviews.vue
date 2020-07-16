@@ -36,7 +36,7 @@ export default {
       default: () => []
     }
   },
-  data: function() {
+  data() {
     return {
       selectedReviewIndex: 0
     };

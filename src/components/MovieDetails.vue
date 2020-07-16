@@ -76,7 +76,7 @@ export default {
       default: ''
     }
   },
-  data: function() {
+  data() {
     return {
       loading: true,
       movie: {},
@@ -164,5 +164,8 @@ export default {
 .movie-votes-box {
   line-height: 1em;
   text-align: center;
+}
+.vm-btn-close:focus {
+  outline: thin dotted !important;
 }
 </style>

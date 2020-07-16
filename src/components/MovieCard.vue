@@ -77,7 +77,7 @@ export default {
       return getYearFromIsoDate(this.releaseDate);
     }
   },
-  data: function() {
+  data() {
     return {
       displayShowMore: false,
       expanded: false

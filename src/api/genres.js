@@ -1,6 +1,6 @@
 import { request } from '@/common/request';
 
-export function fetchGenres() {
+export const fetchGenres = () => {
   return request({
     url: '/genre/movie/list'
   }).then((data) => {

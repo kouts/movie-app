@@ -51,7 +51,7 @@ export default {
       default: ''
     }
   },
-  data: function() {
+  data() {
     return {
       movies: [],
       genresMap: [],

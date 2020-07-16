@@ -1,6 +1,6 @@
 import { request } from '@/common/request';
 
-export function fetchMovies(page) {
+export const fetchMovies = (page) => {
   return request({
     url: 'movie/now_playing',
     params: {
@@ -9,7 +9,7 @@ export function fetchMovies(page) {
   });
 };
 
-export function searchMovies(query, page) {
+export const searchMovies = (query, page) => {
   return request({
     url: 'search/movie',
     params: {
@@ -19,25 +19,25 @@ export function searchMovies(query, page) {
   });
 };
 
-export function fetchMovie(movieId) {
+export const fetchMovie = (movieId) => {
   return request({
     url: 'movie/' + movieId
   });
 };
 
-export function fetchMovieVideos(movieId) {
+export const fetchMovieVideos = (movieId) => {
   return request({
     url: 'movie/' + movieId + '/videos'
   });
 };
 
-export function fetchMovieReviews(movieId) {
+export const fetchMovieReviews = (movieId) => {
   return request({
     url: 'movie/' + movieId + '/reviews'
   });
 };
 
-export function fetchMovieSimilarMovies(movieId) {
+export const fetchMovieSimilarMovies = (movieId) => {
   return request({
     url: 'movie/' + movieId + '/similar'
   });
