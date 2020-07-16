@@ -2,7 +2,9 @@
 <div class="card mb-3">
   <div class="card-body">
     <div class="d-flex flex-row justify-content-between">
-      <h5><a href="#" @click.prevent="$emit('view-details', movieId)">{{ title }}</a> {{ year && `(${year})` }}</h5>
+      <h5>
+        <a href="#" @click.prevent="$emit('view-details', movieId)">{{ title }}</a> {{ year && `(${year})` }}
+      </h5>
       <div>
         {{ voteAverage }}<span class="text-muted"><small>/10</small></span>
       </div>
@@ -16,7 +18,9 @@
           <p v-if="overview" class="mb-0">{{ overview }}</p>
           <p v-else class="text-muted mb-0">No description available</p>
         </div>
-        <div v-if="displayShowMore" :class="['text-muted show-more', expanded && 'is-on']" @click="toggleExpand">{{ expanded ? 'collapse' : '...show full description' }}</div>
+        <div v-if="displayShowMore" :class="['text-muted show-more', expanded && 'is-on']" @click="toggleExpand">
+          {{ expanded ? 'collapse' : '...show full description' }}
+        </div>
       </div>
     </div>
     <div class="row">
@@ -106,7 +110,7 @@ export default {
   position: relative;
   z-index: 1;
   margin-top: -25px;
-  background-image: linear-gradient(to bottom, rgba(255,255,255,0.3) 0%, #fff 40%, #fff 100%);
+  background-image: linear-gradient(to bottom, rgba(255,255,255,0.3) 0%, $white 40%, $white 100%);
 }
 .show-more.is-on {
   background-image:none;

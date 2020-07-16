@@ -36,7 +36,10 @@ export default {
     width: 100%;
     height: 60px; /* Footer height */
     line-height: 60px; /* Vertically center the text */
-    background-color: #f5f5f5;
+    background-color: $gray-200;
     text-align: center;
+  }
+  .footer .text-muted, .footer a {
+    color: darken(desaturate(adjust-hue($primary, -27), 21.63), 25.49) !important;
   }
 </style>
