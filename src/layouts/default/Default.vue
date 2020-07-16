@@ -3,17 +3,20 @@
     <default-nav />
     <slot />
     <default-footer />
+    <go-to-top />
   </div>
 </template>
 
 <script>
 import DefaultNav from './DefaultNav.vue';
 import DefaultFooter from './DefaultFooter.vue';
+import GoToTop from '@/layouts/components/GoToTop.vue';
 
 export default {
   components: {
     DefaultNav,
-    DefaultFooter
+    DefaultFooter,
+    GoToTop
   }
 };
 </script>

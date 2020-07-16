@@ -1,5 +1,4 @@
 <template>
-<div>
   <modal
     v-model="open"
     :title="`${movieTitle} ${year ? '(' + year + ')' : ''}`"
@@ -44,8 +43,8 @@
       <movie-reviews v-show="tabActive === 'reviews'" :reviews="reviews" class="mt-2" />
       <movie-similar-movies v-show="tabActive === 'similarMovies'" :movies="similarMovies" />
     </div>
+    <go-to-top scrollTarget=".vm-wrapper" style="right: 40px;" />
   </modal>
-</div>
 </template>
 
 <script>
@@ -54,6 +53,7 @@ import Loader from '@/components/Loader.vue';
 import MovieOverview from '@/components/MovieOverview.vue';
 import MovieReviews from '@/components/MovieReviews.vue';
 import MovieSimilarMovies from '@/components/MovieSimilarMovies.vue';
+import GoToTop from '@/layouts/components/GoToTop.vue';
 import { getYearFromIsoDate } from '@/common/utils';
 import { fetchMovie, fetchMovieVideos, fetchMovieReviews, fetchMovieSimilarMovies } from '@/api/movies';
 
@@ -120,7 +120,8 @@ export default {
     Loader,
     MovieOverview,
     MovieReviews,
-    MovieSimilarMovies
+    MovieSimilarMovies,
+    GoToTop
   },
   methods: {
     async beforeModalOpen() {
