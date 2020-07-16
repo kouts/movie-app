@@ -15,7 +15,7 @@
         <span class="navbar-toggler-icon"></span>
       </button>
 
-      <div :class="['collapse navbar-collapse', navbarExpanded && 'show']" id="navbarDefault">
+      <div id="navbarDefault" :class="['collapse navbar-collapse', navbarExpanded && 'show']">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
             <router-link to="/" exact exact-active-class="active" class="nav-link" @click.native="collapseNavbar">In Theaters</router-link>

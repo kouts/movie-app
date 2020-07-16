@@ -1,10 +1,10 @@
 <template>
-<div class="loader-wrapper">
-  <div class="alert alert-info d-flex align-items-center">
-    <div class="dual-ring"></div>
-    <span>Loading...</span>
+  <div class="loader-wrapper">
+    <div class="alert alert-info d-flex align-items-center">
+      <div class="dual-ring"></div>
+      <span>Loading...</span>
+    </div>
   </div>
-</div>
 </template>
 
 <style lang="scss" scoped>

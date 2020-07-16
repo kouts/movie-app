@@ -42,13 +42,13 @@
       <movie-similar-movies v-show="tabActive === 'similarMovies'" :movies="similarMovies" :page="page" :total-results="totalResults" />
     </div>
     <scroll-to-load
-      scrollTarget=".vm-wrapper"
+      scroll-target=".vm-wrapper"
       :fetcher="fetchSimilarMovies"
-      :isDisabled="this.similarMovies.length === this.totalResults"
+      :is-disabled="similarMovies.length === totalResults"
       @fetch-start="loading = true"
       @fetch-end="fetchEnd"
     />
-    <go-to-top scrollTarget=".vm-wrapper" style="right: 40px;" />
+    <go-to-top scroll-target=".vm-wrapper" style="right: 40px;" />
   </modal>
 </template>
 
@@ -64,6 +64,15 @@ import { getYearFromIsoDate } from '@/common/utils';
 import { fetchMovie, fetchMovieVideos, fetchMovieReviews, fetchMovieSimilarMovies } from '@/api/movies';
 
 export default {
+  components: {
+    Modal,
+    Loader,
+    MovieOverview,
+    MovieReviews,
+    MovieSimilarMovies,
+    GoToTop,
+    ScrollToLoad
+  },
   props: {
     showModal: {
       type: Boolean,
@@ -125,15 +134,6 @@ export default {
         this.loading = false;
       }
     }
-  },
-  components: {
-    Modal,
-    Loader,
-    MovieOverview,
-    MovieReviews,
-    MovieSimilarMovies,
-    GoToTop,
-    ScrollToLoad
   },
   methods: {
     async beforeModalOpen() {

@@ -1,8 +1,8 @@
 <template>
-<div>
-  <span v-for="(genre, index) in genres" :key="index" class="badge badge-pill badge-genre ml-1">{{ genre }}</span>
-  <span v-if="genres.length === 0" class="text-muted">Unknown genre</span>
-</div>
+  <div>
+    <span v-for="(genre, index) in genres" :key="index" class="badge badge-pill badge-genre ml-1">{{ genre }}</span>
+    <span v-if="genres.length === 0" class="text-muted">Unknown genre</span>
+  </div>
 </template>
 
 <script>

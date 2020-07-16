@@ -1,9 +1,9 @@
 <template>
-<transition name="fade">
-  <a v-show="isVisible" class="btn btn-info back-to-top" @click="scrollToTop">
-    ^ Top
-  </a>
-</transition>
+  <transition name="fade">
+    <a v-show="isVisible" class="btn btn-info back-to-top" @click="scrollToTop">
+      ^ Top
+    </a>
+  </transition>
 </template>
 
 <script>

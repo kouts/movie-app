@@ -1,35 +1,35 @@
 <template>
-<div class="card mb-3">
-  <div class="card-body">
-    <div class="d-flex flex-row justify-content-between">
-      <h5>
-        <a href="#" @click.prevent="$emit('view-details', movieId)">{{ title }}</a> {{ year && `(${year})` }}
-      </h5>
-      <div>
-        {{ voteAverage }}<span class="text-muted"><small>/10</small></span>
-      </div>
-    </div>
-    <div class="row mb-2">
-      <div class="col-md-4 text-center">
-        <movie-image :path="posterPath" :title="title" style="cursor: pointer" @click.native="$emit('view-details', movieId)" />
-      </div>
-      <div class="col-md-8">
-        <div :class="['overview-box', expanded && 'is-expanded']" ref="overviewBox">
-          <p v-if="overview" class="mb-0">{{ overview }}</p>
-          <p v-else class="text-muted mb-0">No description available</p>
-        </div>
-        <div v-if="displayShowMore" :class="['text-muted show-more', expanded && 'is-on']" @click="toggleExpand">
-          {{ expanded ? 'collapse' : '...show full description' }}
+  <div class="card mb-3">
+    <div class="card-body">
+      <div class="d-flex flex-row justify-content-between">
+        <h5>
+          <a href="#" @click.prevent="$emit('view-details', movieId)">{{ title }}</a> {{ year && `(${year})` }}
+        </h5>
+        <div>
+          {{ voteAverage }}<span class="text-muted"><small>/10</small></span>
         </div>
       </div>
-    </div>
-    <div class="row">
-      <div class="col-md-12">
-        <movie-genres :genres="genres"/>
+      <div class="row mb-2">
+        <div class="col-md-4 text-center">
+          <movie-image :path="posterPath" :title="title" style="cursor: pointer" @click.native="$emit('view-details', movieId)" />
+        </div>
+        <div class="col-md-8">
+          <div ref="overviewBox" :class="['overview-box', expanded && 'is-expanded']">
+            <p v-if="overview" class="mb-0">{{ overview }}</p>
+            <p v-else class="text-muted mb-0">No description available</p>
+          </div>
+          <div v-if="displayShowMore" :class="['text-muted show-more', expanded && 'is-on']" @click="toggleExpand">
+            {{ expanded ? 'collapse' : '...show full description' }}
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <movie-genres :genres="genres" />
+        </div>
       </div>
     </div>
   </div>
-</div>
 </template>
 
 <script>
@@ -38,6 +38,10 @@ import MovieImage from '@/components/MovieImage.vue';
 import MovieGenres from '@/components/MovieGenres.vue';
 
 export default {
+  components: {
+    MovieImage,
+    MovieGenres
+  },
   props: {
     movieId: {
       type: Number,
@@ -68,20 +72,16 @@ export default {
       default: ''
     }
   },
-  components: {
-    MovieImage,
-    MovieGenres
-  },
-  computed: {
-    year() {
-      return getYearFromIsoDate(this.releaseDate);
-    }
-  },
   data() {
     return {
       displayShowMore: false,
       expanded: false
     };
+  },
+  computed: {
+    year() {
+      return getYearFromIsoDate(this.releaseDate);
+    }
   },
   mounted() {
     this.displayShowMore = this.$refs.overviewBox.scrollHeight - 10 > this.$refs.overviewBox.clientHeight;

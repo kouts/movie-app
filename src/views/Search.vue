@@ -2,7 +2,7 @@
   <div class="container">
     <h1 class="mb-4">Search a movie</h1>
     <div class="mb-4">
-      <input type="text" :value="search" ref="search" class="form-control" @input="searchHandler($event)" placeholder="Enter a movie title to search..." />
+      <input ref="search" type="text" :value="search" class="form-control" placeholder="Enter a movie title to search..." @input="searchHandler($event)" />
     </div>
     <movies-list mode="search" :query="search" />
   </div>
