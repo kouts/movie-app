@@ -8,7 +8,7 @@
       @modal-closed="showDetailsModal = false"
     />
     <loader :show="loading" />
-    <div v-if="mode === 'search' && query && movies.length === 0" class="font-weight-bold text-center">
+    <div v-if="mode === 'search' && query && movies.length === 0 && !loading" class="font-weight-bold text-center">
       No results found
     </div>
     <div class="row">
