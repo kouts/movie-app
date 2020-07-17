@@ -24,36 +24,44 @@
     </ul>
     <loader :show="loading" style="top: 13.3em;" />
     <div class="pt-2">
-      <!-- Overview -->
-      <movie-overview
-        v-show="tabActive === 'overview'"
-        :title="movie.title"
-        :year="year"
-        :vote-average="movie.vote_average"
-        :votes="movie.vote_count"
-        :release-iso-date="movie.release_date"
-        :duration-in-mins="movie.runtime"
-        :language="movie.original_language"
-        :genres="getMovieGenres(movie.genres)"
-        :poster-path="movie.poster_path"
-        :trailer-key="trailer.key"
-        :overview="movie.overview"
-      />
-      <!-- Reviews -->
-      <movie-reviews v-if="tabActive === 'reviews'" :reviews="reviews" reviews-to-show="2" class="mt-2" />
-      <!-- Similar Movies -->
-      <template v-if="tabActive === 'similarMovies'">
-        <movie-similar-movies :movies="similarMovies" />
-        <div v-if="similarMovies === totalResults && totalResults > 0" class="font-weight-bold text-center mt-2">
-          There are no more similar movies to display
-        </div>
-        <scroll-to-load
-          scroll-target=".vm-wrapper"
-          :fetcher="fetchSimilarMovies"
-          :is-disabled="similarMovies.length === totalResults"
-          @fetch-start="loading = true"
-          @fetch-end="fetchEnd"
+      <!-- Overview tab -->
+      <template v-if="tabActive === 'overview'">
+        <movie-overview
+          v-show="tabLoaded === 'overview'"
+          :title="movie.title"
+          :year="year"
+          :vote-average="movie.vote_average"
+          :votes="movie.vote_count"
+          :release-iso-date="movie.release_date"
+          :duration-in-mins="movie.runtime"
+          :language="movie.original_language"
+          :genres="getMovieGenres(movie.genres)"
+          :poster-path="movie.poster_path"
+          :trailer-key="trailer.key"
+          :overview="movie.overview"
         />
+      </template>
+
+      <!-- Reviews tab -->
+      <template v-if="tabActive === 'reviews'">
+        <movie-reviews v-if="tabLoaded === 'reviews'" :reviews="reviews" reviews-to-show="2" class="mt-2" />
+      </template>
+
+      <!-- Similar movies tab -->
+      <template v-if="tabActive === 'similarMovies'">
+        <template v-if="tabLoaded === 'similarMovies'">
+          <movie-similar-movies :movies="similarMovies" />
+          <div v-if="similarMovies === totalResults && totalResults > 0" class="font-weight-bold text-center mt-2">
+            There are no more similar movies to display
+          </div>
+          <scroll-to-load
+            scroll-target=".vm-wrapper"
+            :fetcher="fetchSimilarMovies"
+            :is-disabled="similarMovies.length === totalResults"
+            @fetch-start="loading = true"
+            @fetch-end="fetchEnd"
+          />
+        </template>
       </template>
     </div>
     <go-to-top scroll-target=".vm-wrapper" style="right: 40px;" />
@@ -65,12 +73,26 @@ import Modal from '@kouts/vue-modal';
 import Loader from '@/components/Loader.vue';
 import MovieOverview from '@/components/MovieOverview.vue';
 import GoToTop from '@/layouts/components/GoToTop.vue';
-import { getYearFromIsoDate } from '@/common/utils';
+import { clone, getYearFromIsoDate } from '@/common/utils';
 import { fetchMovie, fetchMovieVideos, fetchMovieReviews, fetchMovieSimilarMovies } from '@/api/movies';
 
 const MovieReviews = () => import('@/components/MovieReviews.vue');
 const MovieSimilarMovies = () => import('@/components/MovieSimilarMovies.vue');
 const ScrollToLoad = () => import('@/components/ScrollToLoad');
+
+const initialState = {
+  tabActive: 'overview', // overview, reviews, similarMovies
+  tabLoaded: '',
+  loading: true,
+  movie: {},
+  trailer: {},
+  reviews: [],
+  similarMovies: [],
+  page: 0,
+  totalResults: 0,
+  reviewsVisited: false,
+  similarVisited: false
+};
 
 export default {
   components: {
@@ -101,18 +123,7 @@ export default {
     }
   },
   data() {
-    return {
-      tabActive: 'overview', // overview, reviews, similarMovies
-      loading: true,
-      movie: {},
-      trailer: {},
-      reviews: [],
-      similarMovies: [],
-      page: 0,
-      totalResults: 0,
-      reviewsVisited: false,
-      similarVisited: false
-    };
+    return clone(initialState);
   },
   computed: {
     open: {
@@ -144,6 +155,7 @@ export default {
           this.totalResults = res.total_results;
           this.similarVisited = true;
         }
+        this.tabLoaded = val;
         this.loading = false;
       }
     }
@@ -151,10 +163,11 @@ export default {
   methods: {
     async beforeModalOpen() {
       this.loading = true;
-      this.initializeModalState();
+      this.initializeState();
       const data = await Promise.all([fetchMovie(this.movieId), this.fetchMovieTrailer()]);
       this.movie = data[0];
       this.trailer = data[1];
+      this.tabLoaded = 'overview';
       this.loading = false;
     },
     afterModalOpen() {
@@ -163,12 +176,11 @@ export default {
     closingModal() {
       document.body.classList.remove('overflow-hidden');
     },
-    initializeModalState() {
-      this.movie = {};
-      this.trailer = {};
-      this.reviews = [];
-      this.similarMovies = [];
-      this.tabActive = 'overview';
+    initializeState() {
+      const iState = clone(initialState);
+      for (const key in iState) {
+        this[key] = iState[key];
+      }
     },
     fetchMovieTrailer() {
       return fetchMovieVideos(this.movieId).then(data => {
