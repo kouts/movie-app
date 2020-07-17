@@ -50,7 +50,7 @@
       <!-- Similar movies tab -->
       <template v-if="tabActive === 'similarMovies'">
         <template v-if="tabLoaded === 'similarMovies'">
-          <movie-similar-movies :movies="similarMovies" />
+          <movie-similar-movies :movies="similarMovies" class="mt-2" />
           <div v-if="similarMovies === totalResults && totalResults > 0" class="font-weight-bold text-center mt-2">
             There are no more similar movies to display
           </div>
