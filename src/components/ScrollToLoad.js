@@ -23,25 +23,19 @@ export default {
   },
   mounted() {
     this.target = this.scrollTarget ? document.querySelector(this.scrollTarget) : window;
-    if (this.target === window) {
-      this.scrollHandler = debounce(() => {
-        if (this.fetching || this.isDisabled) {
-          return;
-        }
-        if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight - 2) {
-          this.fetch();
-        }
-      }, 150);
-    } else {
-      this.scrollHandler = debounce(() => {
-        if (this.fetching || this.isDisabled) {
-          return;
-        }
-        if (this.target.scrollHeight - this.target.scrollTop === this.target.clientHeight) {
-          this.fetch();
-        }
-      }, 150);
-    }
+    const isScrolledToBottom = this.createCondition();
+    this.scrollHandler = debounce(async() => {
+      if (this.fetching || this.isDisabled) {
+        return;
+      }
+      if (isScrolledToBottom()) {
+        this.$emit('fetch-start');
+        this.fetching = true;
+        const res = await this.fetcher();
+        this.$emit('fetch-end', res);
+        this.fetching = false;
+      }
+    }, 150);
     this.target.addEventListener('scroll', this.scrollHandler);
   },
   beforeDestroy() {
@@ -51,12 +45,12 @@ export default {
     return null;
   },
   methods: {
-    async fetch() {
-      this.$emit('fetch-start');
-      this.fetching = true;
-      const res = await this.fetcher();
-      this.$emit('fetch-end', res);
-      this.fetching = false;
+    createCondition() {
+      if (this.target === window) {
+        return () => (window.innerHeight + window.pageYOffset) >= document.body.offsetHeight - 2;
+      } else {
+        return () => this.target.scrollHeight - this.target.scrollTop === this.target.clientHeight;
+      }
     }
   }
 };
