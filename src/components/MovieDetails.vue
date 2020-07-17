@@ -9,15 +9,15 @@
   >
     <ul class="nav nav-tabs mt-1">
       <li class="nav-item position-relative">
-        <a :class="['nav-link', tabActive === 'overview' && 'active']" href="#" @click="tabActive = 'overview'">Overview</a>
+        <a :class="['nav-link', tabActive === 'overview' && 'active']" href="#" @click.prevent="tabActive = 'overview'">Overview</a>
       </li>
       <li class="nav-item position-relative">
-        <a :class="['nav-link', tabActive === 'reviews' && 'active']" href="#" @click="tabActive = 'reviews'">
+        <a :class="['nav-link', tabActive === 'reviews' && 'active']" href="#" @click.prevent="tabActive = 'reviews'">
           Reviews
         </a>
       </li>
       <li class="nav-item position-relative">
-        <a :class="['nav-link', tabActive === 'similarMovies' && 'active']" href="#" @click="tabActive = 'similarMovies'">
+        <a :class="['nav-link', tabActive === 'similarMovies' && 'active']" href="#" @click.prevent="tabActive = 'similarMovies'">
           Similar movies
         </a>
       </li>
