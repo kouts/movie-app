@@ -33,4 +33,16 @@ const router = new VueRouter({
   routes
 });
 
+// Save and restore scroll position
+const scrollPositions = {};
+router.beforeEach((to, from, next) => {
+  scrollPositions[from.name] = window.pageYOffset;
+  next();
+});
+router.afterEach((to, from) => {
+  Vue.nextTick(() => {
+    window.scrollTo(0, scrollPositions[to.name] || 0);
+  });
+});
+
 export default router;
