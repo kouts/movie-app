@@ -24,7 +24,7 @@ export default {
   created() {
     this.searchHandler = debounce((event) => {
       this.search = event.target.value;
-    }, 100);
+    }, 350);
   },
   mounted() {
     this.$refs.search.focus();
