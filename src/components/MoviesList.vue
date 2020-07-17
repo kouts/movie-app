@@ -90,19 +90,20 @@ export default {
       }
     }
   },
-  async mounted() {
-    const data = await Promise.all([
+  mounted() {
+    return Promise.all([
       fetchGenres(),
       this.mode === 'list' ? fetchMovies(1) : Promise.resolve({
         results: [],
         page: 0,
         total_results: 0
       })
-    ]);
-    this.genresMap = data[0];
-    this.movies = this.movies.concat(data[1].results);
-    this.updatePagingInfo(data[1].page, data[1].total_results);
-    this.loading = false;
+    ]).then(data => {
+      this.genresMap = data[0];
+      this.movies = this.movies.concat(data[1].results);
+      this.updatePagingInfo(data[1].page, data[1].total_results);
+      this.loading = false;
+    });
   },
   methods: {
     fetchData() {
