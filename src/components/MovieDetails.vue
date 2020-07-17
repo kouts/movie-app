@@ -24,6 +24,7 @@
     </ul>
     <loader :show="loading" style="top: 11.5em;" />
     <div class="pt-2">
+      <!-- Overview -->
       <movie-overview
         v-show="tabActive === 'overview'"
         :title="movie.title"
@@ -38,16 +39,22 @@
         :trailer-key="trailer.key"
         :overview="movie.overview"
       />
+      <!-- Reviews -->
       <movie-reviews v-if="tabActive === 'reviews'" :reviews="reviews" reviews-to-show="2" class="mt-2" />
-      <movie-similar-movies v-if="tabActive === 'similarMovies'" :movies="similarMovies" :total-results="totalResults" />
-      <scroll-to-load
-        v-if="tabActive === 'similarMovies'"
-        scroll-target=".vm-wrapper"
-        :fetcher="fetchSimilarMovies"
-        :is-disabled="similarMovies.length === totalResults"
-        @fetch-start="loading = true"
-        @fetch-end="fetchEnd"
-      />
+      <!-- Similar Movies -->
+      <template v-if="tabActive === 'similarMovies'">
+        <movie-similar-movies :movies="similarMovies" />
+        <div v-if="similarMovies === totalResults && totalResults > 0" class="font-weight-bold text-center mt-2">
+          There are no more similar movies to display
+        </div>
+        <scroll-to-load
+          scroll-target=".vm-wrapper"
+          :fetcher="fetchSimilarMovies"
+          :is-disabled="similarMovies.length === totalResults"
+          @fetch-start="loading = true"
+          @fetch-end="fetchEnd"
+        />
+      </template>
     </div>
     <go-to-top scroll-target=".vm-wrapper" style="right: 40px;" />
   </modal>
