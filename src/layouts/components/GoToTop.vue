@@ -54,7 +54,7 @@ export default {
 .back-to-top {
   font-size: 0.9em;
   position: fixed;
-  z-index: 2000;
+  z-index: 1000;
   bottom: 20px;
   right: 20px;
   color: $white !important;

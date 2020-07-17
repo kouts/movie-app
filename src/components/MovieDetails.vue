@@ -64,7 +64,7 @@
         </template>
       </template>
     </div>
-    <go-to-top scroll-target=".vm-wrapper" style="right: 40px;" />
+    <go-to-top scroll-target=".vm-wrapper" />
   </modal>
 </template>
 
