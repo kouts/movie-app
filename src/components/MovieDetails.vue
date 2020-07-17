@@ -38,7 +38,7 @@
         :trailer-key="trailer.key"
         :overview="movie.overview"
       />
-      <movie-reviews v-show="tabActive === 'reviews'" :reviews="reviews" class="mt-2" />
+      <movie-reviews v-show="tabActive === 'reviews'" :reviews="reviews" reviews-to-show="2" class="mt-2" />
       <movie-similar-movies v-show="tabActive === 'similarMovies'" :movies="similarMovies" :page="page" :total-results="totalResults" />
     </div>
     <scroll-to-load
@@ -123,7 +123,7 @@ export default {
       handler: async function(val, oldVal) {
         this.loading = true;
         if (val === 'reviews' && this.reviews.length === 0) {
-          this.reviews = await fetchMovieReviews(this.movieId).then(data => data.results.slice(0, 2));
+          this.reviews = await fetchMovieReviews(this.movieId).then(data => data.results);
         }
         if (val === 'similarMovies' && this.similarMovies.length === 0) {
           const res = await this.fetchSimilarMovies();
