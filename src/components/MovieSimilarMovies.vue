@@ -18,7 +18,7 @@
     <div v-else>
       No similar movies found
     </div>
-    <div v-if="movies.length === totalResults && totalResults > 0" class="font-weight-bold text-center mt-4">
+    <div v-if="movies.length === totalResults && totalResults > 0" class="font-weight-bold text-center mt-2">
       There are no more results to display
     </div>
   </div>
