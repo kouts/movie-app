@@ -109,7 +109,9 @@ export default {
       reviews: [],
       similarMovies: [],
       page: 0,
-      totalResults: 0
+      totalResults: 0,
+      reviewsVisited: false,
+      similarVisited: false
     };
   },
   computed: {
@@ -131,14 +133,16 @@ export default {
     tabActive: {
       handler: async function(val, oldVal) {
         this.loading = true;
-        if (val === 'reviews' && this.reviews.length === 0) {
+        if (val === 'reviews' && this.reviewsVisited === false) {
           this.reviews = await fetchMovieReviews(this.movieId).then(data => data.results);
+          this.reviewsVisited = true;
         }
-        if (val === 'similarMovies' && this.similarMovies.length === 0) {
+        if (val === 'similarMovies' && this.similarVisited === false) {
           const res = await this.fetchSimilarMovies();
           this.similarMovies = res.results;
           this.page = res.page;
           this.totalResults = res.total_results;
+          this.similarVisited = true;
         }
         this.loading = false;
       }
