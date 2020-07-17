@@ -22,7 +22,7 @@
         </a>
       </li>
     </ul>
-    <loader :show="loading" style="top: 11.5em;" />
+    <loader :show="loading" style="top: 13.3em;" />
     <div class="pt-2">
       <!-- Overview -->
       <movie-overview
