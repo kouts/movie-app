@@ -7,7 +7,7 @@
       :movie-release-date="selectedMovieReleaseDate"
       @modal-closed="showDetailsModal = false"
     />
-    <loader v-if="loading" />
+    <loader :show="loading" />
     <div v-if="mode === 'search' && query && movies.length === 0" class="font-weight-bold text-center">
       No results found
     </div>

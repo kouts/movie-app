@@ -1,11 +1,22 @@
 <template>
-  <div class="loader-wrapper">
+  <div v-if="show" class="loader-wrapper">
     <div class="alert alert-info d-flex align-items-center">
       <div class="dual-ring"></div>
       <span>Loading...</span>
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  props: {
+    show: {
+      type: Boolean,
+      default: false
+    }
+  }
+};
+</script>
 
 <style lang="scss" scoped>
 .loader-wrapper {

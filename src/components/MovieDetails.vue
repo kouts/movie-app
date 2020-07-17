@@ -22,7 +22,7 @@
         </a>
       </li>
     </ul>
-    <loader v-if="loading" style="top: 11.5em;" />
+    <loader :show="loading" style="top: 11.5em;" />
     <div class="pt-2">
       <movie-overview
         v-show="tabActive === 'overview'"
