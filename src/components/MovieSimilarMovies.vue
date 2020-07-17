@@ -37,10 +37,6 @@ export default {
       type: Array,
       default: () => []
     },
-    page: {
-      type: Number,
-      default: 0
-    },
     totalResults: {
       type: Number,
       default: 0

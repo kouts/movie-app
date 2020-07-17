@@ -38,16 +38,17 @@
         :trailer-key="trailer.key"
         :overview="movie.overview"
       />
-      <movie-reviews v-show="tabActive === 'reviews'" :reviews="reviews" reviews-to-show="2" class="mt-2" />
-      <movie-similar-movies v-show="tabActive === 'similarMovies'" :movies="similarMovies" :page="page" :total-results="totalResults" />
+      <movie-reviews v-if="tabActive === 'reviews'" :reviews="reviews" reviews-to-show="2" class="mt-2" />
+      <movie-similar-movies v-if="tabActive === 'similarMovies'" :movies="similarMovies" :total-results="totalResults" />
+      <scroll-to-load
+        v-if="tabActive === 'similarMovies'"
+        scroll-target=".vm-wrapper"
+        :fetcher="fetchSimilarMovies"
+        :is-disabled="similarMovies.length === totalResults"
+        @fetch-start="loading = true"
+        @fetch-end="fetchEnd"
+      />
     </div>
-    <scroll-to-load
-      scroll-target=".vm-wrapper"
-      :fetcher="fetchSimilarMovies"
-      :is-disabled="similarMovies.length === totalResults"
-      @fetch-start="loading = true"
-      @fetch-end="fetchEnd"
-    />
     <go-to-top scroll-target=".vm-wrapper" style="right: 40px;" />
   </modal>
 </template>
@@ -56,12 +57,13 @@
 import Modal from '@kouts/vue-modal';
 import Loader from '@/components/Loader.vue';
 import MovieOverview from '@/components/MovieOverview.vue';
-import MovieReviews from '@/components/MovieReviews.vue';
-import MovieSimilarMovies from '@/components/MovieSimilarMovies.vue';
 import GoToTop from '@/layouts/components/GoToTop.vue';
-import ScrollToLoad from '@/components/ScrollToLoad';
 import { getYearFromIsoDate } from '@/common/utils';
 import { fetchMovie, fetchMovieVideos, fetchMovieReviews, fetchMovieSimilarMovies } from '@/api/movies';
+
+const MovieReviews = () => import('@/components/MovieReviews.vue');
+const MovieSimilarMovies = () => import('@/components/MovieSimilarMovies.vue');
+const ScrollToLoad = () => import('@/components/ScrollToLoad');
 
 export default {
   components: {
