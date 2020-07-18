@@ -3,6 +3,9 @@
     <loader :show="loading" />
     <h1 class="mb-4">Now playing in theaters</h1>
     <movies-list :movies="movies" :genres-map="genresMap" />
+    <div v-if="movies.length === 0 && !loading" class="font-weight-bold text-center mt-4">
+      No movies found
+    </div>
     <div v-if="movies.length === totalResults && totalResults > 0" class="font-weight-bold text-center mt-4">
       There are no more results to display
     </div>
