@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const apiKey = 'fa8c8471135a8154a87c9a650572cb1f';
+const apiKey = 'bc50218d91157b1ba4f142ef7baaa6a0';
 const language = 'en-US';
 
 // Create an axios instance
