@@ -12,7 +12,7 @@ describe('MovieSimilarMovies.vue', () => {
     const rows = wrapper.findAll('tbody > tr');
     expect(rows.length).toBe(similarMovies.length);
   });
-  it('only displays a message when no movies are passed', () => {
+  it('displays only a message when no movies are passed', () => {
     const wrapper = shallowMount(MovieSimilarMovies);
     const table = wrapper.find('table');
     expect(table.exists()).toBe(false);

@@ -25,7 +25,7 @@ describe('Home.vue', () => {
     inputSearch.trigger('input', 'test');
     expect(wrapper.vm.searchHandler).toHaveBeenCalledTimes(1);
   });
-  it('Fetches results when searched', (done) => {
+  it('fetches results when search occurs', (done) => {
     apiGenres.fetchGenres.mockImplementation(() => Promise.resolve(genres));
     apiMovies.searchMovies.mockImplementation(() => Promise.resolve(moviesPayload));
     const wrapper = mount(Home);

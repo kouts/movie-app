@@ -2,7 +2,7 @@ import { shallowMount } from '@vue/test-utils';
 import MovieTrailer from '@/components/MovieTrailer.vue';
 
 describe('MovieTrailer.vue', () => {
-  it('renders a youtube iframe when video id is passed', () => {
+  it('renders a youtube iframe when a video id is passed', () => {
     const videoId = 'eyzxu26-Wqk';
     const wrapper = shallowMount(MovieTrailer, {
       propsData: {

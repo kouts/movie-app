@@ -14,7 +14,7 @@ describe('MovieReviews.vue', () => {
     expect(navPills.length).toBe(reviews.length);
     expect(tabPanes.length).toBe(reviews.length);
   });
-  it('correctly renders reviews when limit is passed', () => {
+  it('correctly renders reviews when a limit is passed', () => {
     const limit = 2;
     const wrapper = shallowMount(MovieReviews, {
       propsData: {

@@ -21,7 +21,7 @@ describe('clone', () => {
 });
 
 describe('getYearFromIsoDate', () => {
-  it('returns the correct year when passed an iso date', () => {
+  it('returns the correct year for an iso date', () => {
     const year = getYearFromIsoDate('2020-07-17');
     expect(year).toBe('2020');
   });

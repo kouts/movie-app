@@ -15,12 +15,12 @@ describe('MovieCard.vue', () => {
       overview: movie.overview
     }
   });
-  it('renders correctly when passed props', () => {
+  it('renders correctly when props are passed', () => {
     const card = wrapper.find('div.card');
     expect(card.exists()).toBe(true);
   });
 
-  it('emits view details event with movieId as payload', async() => {
+  it('emits a view-details event with movieId as payload', async() => {
     await wrapper.find('h5 > a').trigger('click');
     expect(wrapper.emitted('view-details')).toBeTruthy();
     expect(wrapper.emitted('view-details')[0]).toEqual([1]);
