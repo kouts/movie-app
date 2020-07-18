@@ -209,11 +209,7 @@ export default {
   max-width: 900px;
   min-height: 250px;
 }
-.movie-votes-box {
-  line-height: 1em;
-  text-align: center;
-}
-.vm-btn-close:focus {
+.movie-details-modal .vm-btn-close:focus {
   outline: thin dotted !important;
 }
 </style>
