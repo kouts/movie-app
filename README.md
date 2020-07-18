@@ -18,7 +18,7 @@ npm run serve
 npm run build
 ```
 
-### To run the unit tests
+### Runs the unit tests
 ```
 npm run test:unit
 ```
