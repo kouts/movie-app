@@ -3,7 +3,7 @@
     <loader :show="loading" />
     <h1 class="mb-4">Search a movie</h1>
     <div class="mb-4">
-      <input ref="search" type="text" class="form-control" placeholder="Enter a movie title to search..." @input="searchHandler($event)" />
+      <input ref="search" type="search" class="form-control" placeholder="Enter a movie title to search..." @input="searchHandler($event)" />
     </div>
     <movies-list :movies="movies" :genres-map="genresMap" />
     <div v-if="searchQuery && movies.length === 0 && !loading" class="font-weight-bold text-center">

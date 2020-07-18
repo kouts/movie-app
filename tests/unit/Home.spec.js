@@ -28,7 +28,7 @@ describe('Home.vue', () => {
       done();
     });
   });
-  it('display a message when no movies found', (done) => {
+  it('displays a message when no movies found', (done) => {
     apiGenres.fetchGenres.mockImplementation(() => Promise.resolve(genres));
     apiMovies.fetchMovies.mockImplementation(() => {
       const payload = clone(moviesPayload);
