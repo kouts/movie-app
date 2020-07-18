@@ -111,3 +111,10 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+.movie-votes-box {
+  line-height: 1em;
+  text-align: center;
+}
+</style>
