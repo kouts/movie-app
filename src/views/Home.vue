@@ -37,11 +37,11 @@ export default {
       totalResults: 0
     };
   },
-  mounted() {
-    return Promise.all([fetchGenres(), fetchMovies(1)]).then(data => {
-      this.genresMap = data[0];
-      this.fetchEnd(data[1]);
-    });
+  async mounted() {
+    this.loading = true;
+    const data = await Promise.all([fetchGenres(), fetchMovies(1)]);
+    this.genresMap = data[0];
+    this.fetchEnd(data[1]);
   },
   methods: {
     fetchData() {
