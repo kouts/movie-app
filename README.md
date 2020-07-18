@@ -1,4 +1,7 @@
-# movierama
+# MovieRama
+A single page application that displays movies using the [Movie Database API](https://developers.themoviedb.org/3) as it's source.
+
+> MovieRama is created using Vue.js 2.6.11 for the JS part and Bootstrap 4.5 for the HTML/SCSS part.
 
 ## Project setup
 ```
@@ -15,7 +18,7 @@ npm run serve
 npm run build
 ```
 
-### Run your unit tests
+### To run the unit tests
 ```
 npm run test:unit
 ```
