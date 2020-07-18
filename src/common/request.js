@@ -30,6 +30,7 @@ request.interceptors.response.use(
     return res;
   },
   error => {
+    // Global api response error handling here...
     console.log(error);
     return Promise.reject(error);
   }
