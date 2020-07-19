@@ -12,12 +12,7 @@
     <div v-if="movies.length === totalResults && totalResults > 0" class="font-weight-bold text-center mt-4">
       There are no more results to display
     </div>
-    <scroll-to-load
-      :fetcher="fetchData"
-      :is-disabled="movies.length === totalResults"
-      @fetch-start="loading = true"
-      @fetch-end="fetchEnd"
-    />
+    <scroll-to-load :is-disabled="movies.length === totalResults || loading" @scrolled-to-bottom="fetchData" />
   </div>
 </template>
 
@@ -53,7 +48,7 @@ export default {
       this.totalResults = 0;
       if (this.searchQuery) {
         this.loading = true;
-        const data = await this.fetchData();
+        const data = await searchMovies(this.searchQuery, 1);
         this.fetchEnd(data);
       };
     }, 350);
@@ -65,9 +60,11 @@ export default {
     this.loading = false;
   },
   methods: {
-    fetchData() {
+    async fetchData() {
+      this.loading = true;
       const nextPage = this.page + 1;
-      return searchMovies(this.searchQuery, nextPage);
+      const res = await searchMovies(this.searchQuery, nextPage);
+      this.fetchEnd(res);
     },
     fetchEnd(res) {
       this.movies = this.movies.concat(res.results);

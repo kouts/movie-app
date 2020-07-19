@@ -56,10 +56,8 @@
           </div>
           <scroll-to-load
             scroll-target=".vm-wrapper"
-            :fetcher="fetchSimilarMovies"
-            :is-disabled="similarMovies.length === totalResults"
-            @fetch-start="loading = true"
-            @fetch-end="fetchEnd"
+            :is-disabled="similarMovies.length === totalResults || loading"
+            @scrolled-to-bottom="fetchSimilarMovies"
           />
         </template>
       </template>
@@ -149,7 +147,7 @@ export default {
           this.reviewsVisited = true;
         }
         if (val === 'similarMovies' && this.similarVisited === false) {
-          const res = await this.fetchSimilarMovies();
+          const res = await fetchMovieSimilarMovies(this.movieId, 1);
           this.similarMovies = res.results;
           this.page = res.page;
           this.totalResults = res.total_results;
@@ -187,9 +185,11 @@ export default {
         return data.results.filter(o => o.type === 'Trailer' && o.site === 'YouTube')[0] || {};
       });
     },
-    fetchSimilarMovies() {
+    async fetchSimilarMovies() {
+      this.loading = true;
       const nextPage = this.page + 1;
-      return fetchMovieSimilarMovies(this.movieId, nextPage);
+      const res = await fetchMovieSimilarMovies(this.movieId, nextPage);
+      this.fetchEnd(res);
     },
     fetchEnd(res) {
       this.similarMovies = this.similarMovies.concat(res.results);

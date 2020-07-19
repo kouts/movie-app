@@ -6,10 +6,6 @@ export default {
       type: String,
       default: ''
     },
-    fetcher: {
-      type: Function,
-      default: null
-    },
     isDisabled: {
       type: Boolean,
       default: true
@@ -17,7 +13,6 @@ export default {
   },
   data() {
     return {
-      fetching: false,
       target: null
     };
   },
@@ -25,15 +20,8 @@ export default {
     this.target = this.scrollTarget ? document.querySelector(this.scrollTarget) : window;
     const isScrolledToBottom = this.createCondition();
     this.scrollHandler = debounce(async() => {
-      if (this.fetching || this.isDisabled) {
-        return;
-      }
-      if (isScrolledToBottom()) {
-        this.$emit('fetch-start');
-        this.fetching = true;
-        const res = await this.fetcher();
-        this.$emit('fetch-end', res);
-        this.fetching = false;
+      if (isScrolledToBottom() && !this.isDisabled) {
+        this.$emit('scrolled-to-bottom');
       }
     }, 150);
     this.target.addEventListener('scroll', this.scrollHandler);
