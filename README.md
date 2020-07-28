@@ -4,6 +4,8 @@ A single page application that displays movies using the [Movie Database API](ht
 > MovieApp is created using Vue.js 2.6.11 for the JS part.
 > For the HTML/CSS part Bootstrap 4.5 is used (only the necessary modules), customized with SASS and sprinkle of custom CSS here and there.
 
+View it live at https://kouts-movieapp.netlify.app
+
 ## Project setup
 ```
 npm install
