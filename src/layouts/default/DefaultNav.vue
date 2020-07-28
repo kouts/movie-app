@@ -2,7 +2,7 @@
   <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
     <div class="container">
       <router-link to="/" exact exact-active-class="active" class="navbar-brand" @click.native="collapseNavbar">
-        <img src="@/assets/logo.png" width="30" height="30" class="d-inline-block align-top" alt="MovieRama" loading="lazy"> MovieRama
+        <img src="@/assets/logo.png" width="30" height="30" class="d-inline-block align-top" alt="MovieApp" loading="lazy"> MovieApp
       </router-link>
       <button
         :class="['navbar-toggler', !navbarExpanded && 'collapsed']"
