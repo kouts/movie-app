@@ -14,7 +14,7 @@ import '@/scss/styles.scss';
 export default {
   computed: {
     layout() {
-      return 'layout-' + this.$route.meta.layout || 'default';
+      return `layout-${this.$route.meta.layout || 'default'}`;
     }
   }
 };
