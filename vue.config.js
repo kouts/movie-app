@@ -19,7 +19,6 @@ module.exports = {
   chainWebpack: config => {
     config.plugin('html').tap(args => {
       args[0].title = 'MovieApp';
-      args[0].meta = { viewport: 'width=device-width, initial-scale=1, shrink-to-fit=no' };
       args[0].meta = { description: 'A single page application that displays movies using the Movie Database API as it\'s source.' };
       return args;
     });
