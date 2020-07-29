@@ -3,6 +3,11 @@
     <loader :show="loading" />
     <h1 class="mb-4">Now playing in theaters</h1>
     <movies-list :movies="movies" :genres-map="genresMap" />
+    <div v-if="movies.length === 0 && loading" class="row">
+      <div v-for="item in [1, 2, 3, 4]" :key="item" class="col-md-6">
+        <div class="card mb-3" style="min-height: 324px;"></div>
+      </div>
+    </div>
     <div v-if="movies.length === 0 && !loading" class="font-weight-bold text-center mt-4">
       No movies found
     </div>
