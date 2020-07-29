@@ -2,9 +2,9 @@
   <div class="card mb-3">
     <div class="card-body">
       <div class="d-flex flex-row justify-content-between">
-        <h5>
+        <h2 class="movie-card-title">
           <a href="#" @click.prevent="$emit('view-details', movieId)">{{ title }}</a> {{ year && `(${year})` }}
-        </h5>
+        </h2>
         <div>
           {{ voteAverage }}<span class="text-muted"><small>/10</small></span>
         </div>
@@ -95,6 +95,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.movie-card-title {
+  font-size: 1.25rem;
+}
 .overview-box {
   overflow: hidden;
   max-height: 170px;
