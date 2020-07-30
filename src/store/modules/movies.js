@@ -15,7 +15,7 @@ const actions = {
     const res = await fetchMovies(page);
     commit('UPDATE_MOVIES', res.results);
     commit('SET_PAGE', res.page);
-    commit('SET_TOTAL_RESULTS', res.totalResults);
+    commit('SET_TOTAL_RESULTS', res.total_results);
     commit('SET_LOADING', false);
   },
   async fetchGenres({ commit }) {
@@ -33,7 +33,7 @@ const actions = {
       const res = await searchMovies(query, page);
       commit('UPDATE_MOVIES', res.results);
       commit('SET_PAGE', res.page);
-      commit('SET_TOTAL_RESULTS', res.totalResults);
+      commit('SET_TOTAL_RESULTS', res.total_results);
       commit('SET_LOADING', false);
     }
   }
