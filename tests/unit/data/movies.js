@@ -154,7 +154,7 @@ export const reviews = [
   }
 ];
 
-export const genres = {
+export const genresMap = {
   12: 'Adventure',
   14: 'Fantasy',
   16: 'Animation',

@@ -1,41 +1,58 @@
-import { mount } from '@vue/test-utils';
+import { mount, createLocalVue } from '@vue/test-utils';
+import Vuex from 'vuex';
 import Home from '@/views/Home.vue';
-import { moviesPayload, genres } from './data/movies';
-import * as apiGenres from '@/api/genres';
-import * as apiMovies from '@/api/movies';
-import { clone } from '@/common/utils';
+import { moviesPayload, genresMap } from './data/movies';
+import { merge } from 'lodash-es';
 
-const originalFetchGenres = apiGenres.fetchGenres;
-const originalFetchMovies = apiMovies.fetchMovies;
-apiGenres.fetchGenres = jest.fn();
-apiMovies.fetchMovies = jest.fn();
+const localVue = createLocalVue();
+localVue.use(Vuex);
 
-beforeEach(() => {
-  jest.clearAllMocks();
-  // Reset to original implementation before each test
-  apiGenres.fetchGenres.mockImplementation(originalFetchGenres);
-  apiMovies.fetchMovies.mockImplementation(originalFetchMovies);
-});
+const createStore = (options) => {
+  const defaults = {
+    namespaced: true,
+    state: {
+      movies: [],
+      genres: [],
+      loading: false,
+      page: 0,
+      totalResults: 0
+    },
+    actions: {
+      fetchMovies: jest.fn(),
+      fetchGenres: jest.fn()
+    },
+    getters: {
+      genresMap(state) {
+        return genresMap;
+      }
+    }
+  };
+  const moviesHome = merge(defaults, options);
+  return new Vuex.Store({ modules: { moviesHome } });
+};
 
 describe('Home.vue', () => {
   it('correctly renders a list of cards', (done) => {
-    apiGenres.fetchGenres.mockImplementation(() => Promise.resolve(genres));
-    apiMovies.fetchMovies.mockImplementation(() => Promise.resolve(moviesPayload));
-    const wrapper = mount(Home);
+    const store = createStore({
+      state: {
+        movies: moviesPayload.results
+      }
+    });
+    const wrapper = mount(Home, { store, localVue });
     setTimeout(() => {
       const cards = wrapper.findAll('.card');
       expect(cards.length).toBe(2);
       done();
     });
   });
+
   it('displays a message when no movies found', (done) => {
-    apiGenres.fetchGenres.mockImplementation(() => Promise.resolve(genres));
-    apiMovies.fetchMovies.mockImplementation(() => {
-      const payload = clone(moviesPayload);
-      payload.results = [];
-      return Promise.resolve(payload);
+    const store = createStore({
+      state: {
+        movies: []
+      }
     });
-    const wrapper = mount(Home);
+    const wrapper = mount(Home, { store, localVue });
     setTimeout(() => {
       const cards = wrapper.findAll('.card');
       expect(cards.length).toBe(0);

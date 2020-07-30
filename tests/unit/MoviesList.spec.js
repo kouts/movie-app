@@ -1,13 +1,13 @@
 import { mount } from '@vue/test-utils';
 import MoviesList from '@/components/MoviesList.vue';
-import { movies, genres } from './data/movies';
+import { movies, genresMap } from './data/movies';
 
 describe('MoviesList.vue', () => {
   it('correctly renders a list of cards', () => {
     const wrapper = mount(MoviesList, {
       propsData: {
         movies,
-        genresMap: genres
+        genresMap: genresMap
       }
     });
     const cards = wrapper.findAll('.card');

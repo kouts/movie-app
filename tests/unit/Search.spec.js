@@ -1,51 +1,53 @@
-import { mount } from '@vue/test-utils';
-import Home from '@/views/Search.vue';
-import { moviesPayload, genres } from './data/movies';
-import * as apiGenres from '@/api/genres';
-import * as apiMovies from '@/api/movies';
-import { clone } from '@/common/utils';
+import { mount, createLocalVue } from '@vue/test-utils';
+import Vuex from 'vuex';
+import Search from '@/views/Search.vue';
+import { moviesPayload, genresMap } from './data/movies';
+import { merge } from 'lodash-es';
 
-const originalFetchGenres = apiGenres.fetchGenres;
-const originalSearchMovies = apiMovies.searchMovies;
-apiGenres.fetchGenres = jest.fn();
-apiMovies.searchMovies = jest.fn();
+const localVue = createLocalVue();
+localVue.use(Vuex);
 
-beforeEach(() => {
-  jest.clearAllMocks();
-  // Reset to original implementation before each test
-  apiGenres.fetchGenres.mockImplementation(originalFetchGenres);
-  apiMovies.searchMovies.mockImplementation(originalSearchMovies);
-});
+const createStore = (options) => {
+  const defaults = {
+    namespaced: true,
+    state: {
+      movies: [],
+      genres: [],
+      loading: false,
+      page: 0,
+      totalResults: 0
+    },
+    actions: {
+      searchMovies: jest.fn(),
+      fetchGenres: jest.fn()
+    },
+    getters: {
+      genresMap(state) {
+        return genresMap;
+      }
+    }
+  };
+  const moviesSearch = merge(defaults, options);
+  return new Vuex.Store({ modules: { moviesSearch } });
+};
 
 describe('Home.vue', () => {
-  it('correctly fires the search handler', () => {
-    const wrapper = mount(Home);
+  it('correctly fires the search handler', (done) => {
+    const store = createStore();
+    const wrapper = mount(Search, { store, localVue });
     const inputSearch = wrapper.find('input[type="search"]');
-    jest.spyOn(wrapper.vm, 'searchHandler');
-    inputSearch.trigger('input', 'test');
-    expect(wrapper.vm.searchHandler).toHaveBeenCalledTimes(1);
-  });
-  it('fetches results when search occurs', (done) => {
-    apiGenres.fetchGenres.mockImplementation(() => Promise.resolve(genres));
-    apiMovies.searchMovies.mockImplementation(() => Promise.resolve(moviesPayload));
-    const wrapper = mount(Home);
-    const inputSearch = wrapper.find('input[type="search"]');
-    inputSearch.setValue('test');
     setTimeout(() => {
-      expect(wrapper.vm.movies.length).toBe(2);
+      jest.spyOn(wrapper.vm, 'searchHandler');
+      inputSearch.trigger('input', 'test');
+      expect(wrapper.vm.searchHandler).toHaveBeenCalledTimes(1);
       done();
-    }, 370);
+    });
   });
   it('displays a no results found message when search results are empty', (done) => {
-    apiGenres.fetchGenres.mockImplementation(() => Promise.resolve(genres));
-    apiMovies.searchMovies.mockImplementation(() => {
-      return Promise.resolve({
-        results: [],
-        page: 0,
-        total_results: 0
-      });
-    });
-    const wrapper = mount(Home, {
+    const store = createStore();
+    const wrapper = mount(Search, {
+      store,
+      localVue,
       data() {
         return {
           searchQuery: 'test'
@@ -58,13 +60,18 @@ describe('Home.vue', () => {
     });
   });
   it('displays a no more results found message when search results do not contain any more entries', (done) => {
-    apiGenres.fetchGenres.mockImplementation(() => Promise.resolve(genres));
-    const wrapper = mount(Home, {
+    const store = createStore({
+      state: {
+        movies: moviesPayload.results,
+        page: 1,
+        totalResults: 2
+      }
+    });
+    const wrapper = mount(Search, {
+      store,
+      localVue,
       data() {
         return {
-          movies: clone(moviesPayload.results),
-          page: 1,
-          totalResults: 2,
           searchQuery: 'test'
         };
       }
