@@ -5,6 +5,9 @@ module.exports = {
     'style-resources-loader': {
       preProcessor: 'scss',
       patterns: [path.resolve(__dirname, './src/scss/styles.scss')]
+    },
+    webpackBundleAnalyzer: {
+      openAnalyzer: false
     }
   },
   css: {
