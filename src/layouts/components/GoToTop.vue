@@ -44,7 +44,11 @@ export default {
   },
   methods: {
     scrollToTop() {
-      this.target.scrollTo({ top: 0, behavior: 'smooth' });
+      if (typeof this.target.scrollTo === 'function') {
+        this.target.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        this.target.scrollTop = 0;
+      }
     }
   }
 };
