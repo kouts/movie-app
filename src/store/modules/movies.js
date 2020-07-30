@@ -23,17 +23,19 @@ const actions = {
     commit('SET_GENRES', res.genres);
   },
   async searchMovies({ commit }, { clear, query, page }) {
-    commit('SET_LOADING', true);
     if (clear) {
       commit('SET_MOVIES', []);
       commit('SET_PAGE', 0);
       commit('SET_TOTAL_RESULTS', 0);
     }
-    const res = await searchMovies(query, page);
-    commit('UPDATE_MOVIES', res.results);
-    commit('SET_PAGE', res.page);
-    commit('SET_TOTAL_RESULTS', res.totalResults);
-    commit('SET_LOADING', false);
+    if (query) {
+      commit('SET_LOADING', true);
+      const res = await searchMovies(query, page);
+      commit('UPDATE_MOVIES', res.results);
+      commit('SET_PAGE', res.page);
+      commit('SET_TOTAL_RESULTS', res.totalResults);
+      commit('SET_LOADING', false);
+    }
   }
 };
 

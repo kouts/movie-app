@@ -59,9 +59,7 @@ export default {
   created() {
     this.searchHandler = debounce(async(event) => {
       this.searchQuery = event.target.value;
-      if (this.searchQuery) {
-        this.searchMovies({ clear: true, query: this.searchQuery, page: 1 });
-      };
+      this.searchMovies({ clear: true, query: this.searchQuery, page: 1 });
     }, 350);
   },
   async mounted() {
