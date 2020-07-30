@@ -65,9 +65,11 @@ export default {
     }, 350);
   },
   async mounted() {
-    this.$refs.search.focus();
     await this.fetchGenres();
     this.searchDisabled = false;
+    this.$nextTick(() => {
+      this.$refs.search.focus();
+    });
   },
   methods: {
     ...mapActions('moviesSearch', [
