@@ -21,7 +21,7 @@ describe('MovieCard.vue', () => {
   });
 
   it('emits a view-details event with movieId as payload', async() => {
-    await wrapper.find('h5 > a').trigger('click');
+    await wrapper.find('.movie-card-title > a').trigger('click');
     expect(wrapper.emitted('view-details')).toBeTruthy();
     expect(wrapper.emitted('view-details')[0]).toEqual([1]);
   });
