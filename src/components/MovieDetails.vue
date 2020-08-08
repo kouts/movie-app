@@ -3,8 +3,8 @@
     v-model="open"
     :title="`${movieTitle} ${year ? '(' + year + ')' : ''}`"
     modal-class="movie-details-modal"
-    @beforeOpen="beforeModalOpen"
-    @afterOpen="afterModalOpen"
+    @before-open="beforeModalOpen"
+    @after-open="afterModalOpen"
     @closing="closingModal"
   >
     <ul class="nav nav-tabs mt-1">
