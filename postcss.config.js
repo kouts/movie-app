@@ -2,6 +2,7 @@ const IN_PRODUCTION = process.env.NODE_ENV === 'production';
 
 module.exports = {
   plugins: [
+    require('autoprefixer'),
     IN_PRODUCTION && require('@fullhuman/postcss-purgecss')({
       content: ['./public/**/*.html', './src/**/*.vue'],
       defaultExtractor(content) {
