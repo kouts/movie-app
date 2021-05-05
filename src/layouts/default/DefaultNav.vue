@@ -2,7 +2,8 @@
   <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
     <div class="container">
       <router-link to="/" exact exact-active-class="active" class="navbar-brand" @click.native="collapseNavbar">
-        <img src="@/assets/logo.png" width="30" height="30" class="d-inline-block align-top" alt="MovieApp" loading="lazy"> MovieApp
+        <img src="@/assets/logo.png" width="30" height="30" class="d-inline-block align-top" alt="MovieApp" loading="lazy" />
+        MovieApp
       </router-link>
       <button
         :class="['navbar-toggler', !navbarExpanded && 'collapsed']"
@@ -18,7 +19,9 @@
       <div id="navbarDefault" :class="['collapse navbar-collapse', !navbarExpanded && 'd-none']">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
-            <router-link to="/" exact exact-active-class="active" class="nav-link" @click.native="collapseNavbar">In Theaters</router-link>
+            <router-link to="/" exact exact-active-class="active" class="nav-link" @click.native="collapseNavbar"
+              >In Theaters</router-link
+            >
           </li>
           <li class="nav-item">
             <router-link to="/search" class="nav-link" @click.native="collapseNavbar">Search</router-link>
@@ -34,15 +37,15 @@ export default {
   data() {
     return {
       navbarExpanded: false
-    };
+    }
   },
   methods: {
     toggleNavbar() {
-      this.navbarExpanded = !this.navbarExpanded;
+      this.navbarExpanded = !this.navbarExpanded
     },
     collapseNavbar() {
-      this.navbarExpanded = false;
+      this.navbarExpanded = false
     }
   }
-};
+}
 </script>

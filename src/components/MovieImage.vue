@@ -1,7 +1,20 @@
 <template>
   <div>
-    <img v-if="path" loading="lazy" :src="`https://image.tmdb.org/t/p/${widthApi}/${path}`" :class="posterClass" :alt="title" :style="{width: width}">
-    <img v-else src="@/assets/poster-not-available.png" class="img-fluid border" alt="Poster not available" :style="{width: width}" />
+    <img
+      v-if="path"
+      loading="lazy"
+      :src="`https://image.tmdb.org/t/p/${widthApi}/${path}`"
+      :class="posterClass"
+      :alt="title"
+      :style="{ width: width }"
+    />
+    <img
+      v-else
+      src="@/assets/poster-not-available.png"
+      class="img-fluid border"
+      alt="Poster not available"
+      :style="{ width: width }"
+    />
   </div>
 </template>
 
@@ -29,5 +42,5 @@ export default {
       default: 'w185'
     }
   }
-};
+}
 </script>

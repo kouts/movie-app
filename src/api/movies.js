@@ -1,4 +1,4 @@
-import { request } from '@/common/request';
+import { request } from '@/common/request'
 
 export const fetchMovies = (page) => {
   return request({
@@ -6,8 +6,8 @@ export const fetchMovies = (page) => {
     params: {
       page: page
     }
-  });
-};
+  })
+}
 
 export const searchMovies = (query, page) => {
   return request({
@@ -16,26 +16,26 @@ export const searchMovies = (query, page) => {
       query,
       page
     }
-  });
-};
+  })
+}
 
 export const fetchMovie = (movieId) => {
   return request({
     url: 'movie/' + movieId
-  });
-};
+  })
+}
 
 export const fetchMovieVideos = (movieId) => {
   return request({
     url: 'movie/' + movieId + '/videos'
-  });
-};
+  })
+}
 
 export const fetchMovieReviews = (movieId) => {
   return request({
     url: 'movie/' + movieId + '/reviews'
-  });
-};
+  })
+}
 
 export const fetchMovieSimilarMovies = (movieId, page) => {
   return request({
@@ -43,5 +43,5 @@ export const fetchMovieSimilarMovies = (movieId, page) => {
     params: {
       page: page
     }
-  });
-};
+  })
+}

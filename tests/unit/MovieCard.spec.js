@@ -1,9 +1,9 @@
-import { shallowMount } from '@vue/test-utils';
-import MovieCard from '@/components/MovieCard.vue';
-import { movies } from './data/movies';
+import { shallowMount } from '@vue/test-utils'
+import MovieCard from '@/components/MovieCard.vue'
+import { movies } from './data/movies'
 
 describe('MovieCard.vue', () => {
-  const movie = movies.slice(0, 1);
+  const movie = movies.slice(0, 1)
   const wrapper = shallowMount(MovieCard, {
     propsData: {
       movieId: 1,
@@ -14,15 +14,15 @@ describe('MovieCard.vue', () => {
       voteAverage: movie.vote_average,
       overview: movie.overview
     }
-  });
+  })
   it('renders correctly when props are passed', () => {
-    const card = wrapper.find('div.card');
-    expect(card.exists()).toBe(true);
-  });
+    const card = wrapper.find('div.card')
+    expect(card.exists()).toBe(true)
+  })
 
-  it('emits a view-details event with movieId as payload', async() => {
-    await wrapper.find('.movie-card-title > a').trigger('click');
-    expect(wrapper.emitted('view-details')).toBeTruthy();
-    expect(wrapper.emitted('view-details')[0]).toEqual([1]);
-  });
-});
+  it('emits a view-details event with movieId as payload', async () => {
+    await wrapper.find('.movie-card-title > a').trigger('click')
+    expect(wrapper.emitted('view-details')).toBeTruthy()
+    expect(wrapper.emitted('view-details')[0]).toEqual([1])
+  })
+})
