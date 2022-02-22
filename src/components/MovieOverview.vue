@@ -2,11 +2,13 @@
   <div>
     <div class="d-flex flex-sm-row flex-column justify-content-between">
       <div>
-        <h2 class="d-inline-flex mb-1">{{ title }}</h2> <h3 v-if="year" class="d-inline-flex text-muted mb-1">({{ year }})</h3>
+        <h2 class="d-inline-flex mb-1">{{ title }}</h2>
+        <h3 v-if="year" class="d-inline-flex text-muted mb-1">({{ year }})</h3>
       </div>
       <div class="d-flex align-items-center">
         <div class="border-right pr-2">
-          <h3 class="d-inline">{{ voteAverage }}</h3><span class="text-muted">/10</span>
+          <h3 class="d-inline">{{ voteAverage }}</h3>
+          <span class="text-muted">/10</span>
         </div>
         <div class="pl-2 movie-votes-box">
           <div>{{ votes }}</div>
@@ -38,9 +40,9 @@
 </template>
 
 <script>
-import MovieGenres from '@/components/MovieGenres.vue';
-import MovieTrailer from '@/components/MovieTrailer.vue';
-import MovieImage from '@/components/MovieImage.vue';
+import MovieGenres from '@/components/MovieGenres.vue'
+import MovieTrailer from '@/components/MovieTrailer.vue'
+import MovieImage from '@/components/MovieImage.vue'
 
 export default {
   components: {
@@ -96,20 +98,20 @@ export default {
   },
   computed: {
     durationInHoursAndMinutes() {
-      const hours = Math.floor(this.durationInMins / 60);
-      const minutes = this.durationInMins % 60;
-      return `${hours}h ${minutes}m`;
+      const hours = Math.floor(this.durationInMins / 60)
+      const minutes = this.durationInMins % 60
+      return `${hours}h ${minutes}m`
     },
     releaseDateInText() {
       if (!this.releaseIsoDate) {
-        return '';
+        return ''
       }
-      const date = new Date(this.releaseIsoDate);
-      const month = date.toLocaleString('en-GB', { month: 'long' });
-      return `${date.getDate()} ${month} ${date.getFullYear()}`;
+      const date = new Date(this.releaseIsoDate)
+      const month = date.toLocaleString('en-GB', { month: 'long' })
+      return `${date.getDate()} ${month} ${date.getFullYear()}`
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

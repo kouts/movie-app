@@ -1,6 +1,6 @@
-import { mount } from '@vue/test-utils';
-import MoviesList from '@/components/MoviesList.vue';
-import { movies, genresMap } from './data/movies';
+import { mount } from '@vue/test-utils'
+import MoviesList from '@/components/MoviesList.vue'
+import { movies, genresMap } from './data/movies'
 
 describe('MoviesList.vue', () => {
   it('correctly renders a list of cards', () => {
@@ -9,13 +9,13 @@ describe('MoviesList.vue', () => {
         movies,
         genresMap: genresMap
       }
-    });
-    const cards = wrapper.findAll('.card');
-    expect(cards.length).toBe(2);
-  });
+    })
+    const cards = wrapper.findAll('.card')
+    expect(cards.length).toBe(2)
+  })
   it('does not render anything when no props are passed', () => {
-    const wrapper = mount(MoviesList);
-    const divs = wrapper.findAll('div.row > div');
-    expect(divs.exists()).toBe(false);
-  });
-});
+    const wrapper = mount(MoviesList)
+    const divs = wrapper.findAll('div.row > div')
+    expect(divs.exists()).toBe(false)
+  })
+})

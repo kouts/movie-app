@@ -9,7 +9,9 @@
   >
     <ul class="nav nav-tabs mt-1">
       <li class="nav-item position-relative">
-        <a :class="['nav-link', tabActive === 'overview' && 'active']" href="#" @click.prevent="tabActive = 'overview'">Overview</a>
+        <a :class="['nav-link', tabActive === 'overview' && 'active']" href="#" @click.prevent="tabActive = 'overview'"
+          >Overview</a
+        >
       </li>
       <li class="nav-item position-relative">
         <a :class="['nav-link', tabActive === 'reviews' && 'active']" href="#" @click.prevent="tabActive = 'reviews'">
@@ -17,12 +19,16 @@
         </a>
       </li>
       <li class="nav-item position-relative">
-        <a :class="['nav-link', tabActive === 'similarMovies' && 'active']" href="#" @click.prevent="tabActive = 'similarMovies'">
+        <a
+          :class="['nav-link', tabActive === 'similarMovies' && 'active']"
+          href="#"
+          @click.prevent="tabActive = 'similarMovies'"
+        >
           Similar movies
         </a>
       </li>
     </ul>
-    <loader :show="loading" style="top: 13.3em;" />
+    <loader :show="loading" style="top: 13.3em" />
     <div class="pt-2">
       <!-- Overview tab -->
       <template v-if="tabActive === 'overview'">
@@ -67,16 +73,16 @@
 </template>
 
 <script>
-import Modal from '@kouts/vue-modal';
-import Loader from '@/components/Loader.vue';
-import MovieOverview from '@/components/MovieOverview.vue';
-import GoToTop from '@/layouts/components/GoToTop.vue';
-import { clone, getYearFromIsoDate } from '@/common/utils';
-import { fetchMovie, fetchMovieVideos, fetchMovieReviews, fetchMovieSimilarMovies } from '@/api/movies';
+import Modal from '@kouts/vue-modal'
+import Loader from '@/components/Loader.vue'
+import MovieOverview from '@/components/MovieOverview.vue'
+import GoToTop from '@/layouts/components/GoToTop.vue'
+import { clone, getYearFromIsoDate } from '@/common/utils'
+import { fetchMovie, fetchMovieVideos, fetchMovieReviews, fetchMovieSimilarMovies } from '@/api/movies'
 
-const MovieReviews = () => import('@/components/MovieReviews.vue');
-const MovieSimilarMovies = () => import('@/components/MovieSimilarMovies.vue');
-const ScrollToLoad = () => import('@/components/ScrollToLoad');
+const MovieReviews = () => import('@/components/MovieReviews.vue')
+const MovieSimilarMovies = () => import('@/components/MovieSimilarMovies.vue')
+const ScrollToLoad = () => import('@/components/ScrollToLoad')
 
 const initialState = {
   tabActive: 'overview', // overview, reviews, similarMovies
@@ -90,7 +96,7 @@ const initialState = {
   totalResults: 0,
   reviewsVisited: false,
   similarVisited: false
-};
+}
 
 export default {
   components: {
@@ -121,87 +127,87 @@ export default {
     }
   },
   data() {
-    return clone(initialState);
+    return clone(initialState)
   },
   computed: {
     open: {
       get() {
-        return this.showModal;
+        return this.showModal
       },
       set(newValue) {
         if (newValue === false) {
-          this.$emit('modal-closed');
+          this.$emit('modal-closed')
         }
       }
     },
     year() {
-      return getYearFromIsoDate(this.movieReleaseDate);
+      return getYearFromIsoDate(this.movieReleaseDate)
     }
   },
   watch: {
     tabActive: {
-      handler: async function(val, oldVal) {
-        this.loading = true;
+      handler: async function (val, oldVal) {
+        this.loading = true
         if (val === 'reviews' && this.reviewsVisited === false) {
-          this.reviews = await fetchMovieReviews(this.movieId).then(data => data.results);
-          this.reviewsVisited = true;
+          this.reviews = await fetchMovieReviews(this.movieId).then((data) => data.results)
+          this.reviewsVisited = true
         }
         if (val === 'similarMovies' && this.similarVisited === false) {
-          const res = await fetchMovieSimilarMovies(this.movieId, 1);
-          this.similarMovies = res.results;
-          this.page = res.page;
-          this.totalResults = res.total_results;
-          this.similarVisited = true;
+          const res = await fetchMovieSimilarMovies(this.movieId, 1)
+          this.similarMovies = res.results
+          this.page = res.page
+          this.totalResults = res.total_results
+          this.similarVisited = true
         }
-        this.tabLoaded = val;
-        this.loading = false;
+        this.tabLoaded = val
+        this.loading = false
       }
     }
   },
   methods: {
     async beforeModalOpen() {
-      this.loading = true;
-      this.initializeState();
-      const data = await Promise.all([fetchMovie(this.movieId), this.fetchMovieTrailer()]);
-      this.movie = data[0];
-      this.trailer = data[1];
-      this.tabLoaded = 'overview';
-      this.loading = false;
+      this.loading = true
+      this.initializeState()
+      const data = await Promise.all([fetchMovie(this.movieId), this.fetchMovieTrailer()])
+      this.movie = data[0]
+      this.trailer = data[1]
+      this.tabLoaded = 'overview'
+      this.loading = false
     },
     afterModalOpen() {
-      document.body.classList.add('overflow-hidden');
+      document.body.classList.add('overflow-hidden')
     },
     closingModal() {
-      document.body.classList.remove('overflow-hidden');
+      document.body.classList.remove('overflow-hidden')
     },
     initializeState() {
-      const iState = clone(initialState);
+      const iState = clone(initialState)
       for (const key in iState) {
-        this[key] = iState[key];
+        this[key] = iState[key]
       }
     },
     fetchMovieTrailer() {
-      return fetchMovieVideos(this.movieId).then(data => {
-        return data.results.filter(o => o.type === 'Trailer' && o.site === 'YouTube')[0] || {};
-      });
+      return fetchMovieVideos(this.movieId).then((data) => {
+        return data.results.filter((o) => o.type === 'Trailer' && o.site === 'YouTube')[0] || {}
+      })
     },
     async fetchSimilarMovies() {
-      this.loading = true;
-      const nextPage = this.page + 1;
-      const res = await fetchMovieSimilarMovies(this.movieId, nextPage);
-      this.fetchEnd(res);
+      this.loading = true
+      const nextPage = this.page + 1
+      const res = await fetchMovieSimilarMovies(this.movieId, nextPage)
+      this.fetchEnd(res)
     },
     fetchEnd(res) {
-      this.similarMovies = this.similarMovies.concat(res.results);
-      this.page = res.page;
-      this.totalResults = res.total_results;
-      this.loading = false;
+      this.similarMovies = this.similarMovies.concat(res.results)
+      this.page = res.page
+      this.totalResults = res.total_results
+      this.loading = false
     },
     getMovieGenres(genresArrayOfObj) {
-      return genresArrayOfObj ? genresArrayOfObj.map(o => o.name) : [];
+      return genresArrayOfObj ? genresArrayOfObj.map((o) => o.name) : []
     }
   }
-};
+}
 </script>
 
 <style lang="scss">

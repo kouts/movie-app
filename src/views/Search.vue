@@ -13,9 +13,7 @@
       />
     </div>
     <movies-list :movies="movies" :genres-map="genresMap" />
-    <div v-if="searchQuery && movies.length === 0 && !loading" class="font-weight-bold text-center">
-      No results found
-    </div>
+    <div v-if="searchQuery && movies.length === 0 && !loading" class="font-weight-bold text-center">No results found</div>
     <div v-if="movies.length === totalResults && totalResults > 0" class="font-weight-bold text-center mt-4">
       There are no more results to display
     </div>
@@ -27,11 +25,11 @@
 </template>
 
 <script>
-import { debounce } from 'lodash-es';
-import { mapState, mapActions, mapGetters } from 'vuex';
-import Loader from '@/components/Loader.vue';
-import ScrollToLoad from '@/components/ScrollToLoad';
-import MoviesList from '@/components/MoviesList.vue';
+import { debounce } from 'lodash-es'
+import { mapState, mapActions, mapGetters } from 'vuex'
+import Loader from '@/components/Loader.vue'
+import ScrollToLoad from '@/components/ScrollToLoad'
+import MoviesList from '@/components/MoviesList.vue'
 
 export default {
   components: {
@@ -43,37 +41,32 @@ export default {
     return {
       searchQuery: '',
       searchDisabled: true
-    };
+    }
   },
   computed: {
     ...mapState('moviesSearch', {
-      movies: state => state.movies,
-      loading: state => state.loading,
-      page: state => state.page,
-      totalResults: state => state.totalResults
+      movies: (state) => state.movies,
+      loading: (state) => state.loading,
+      page: (state) => state.page,
+      totalResults: (state) => state.totalResults
     }),
-    ...mapGetters('moviesSearch', [
-      'genresMap'
-    ])
+    ...mapGetters('moviesSearch', ['genresMap'])
   },
   created() {
-    this.searchHandler = debounce(async(event) => {
-      this.searchQuery = event.target.value;
-      this.searchMovies({ clear: true, query: this.searchQuery, page: 1 });
-    }, 350);
+    this.searchHandler = debounce(async (event) => {
+      this.searchQuery = event.target.value
+      this.searchMovies({ clear: true, query: this.searchQuery, page: 1 })
+    }, 350)
   },
   async mounted() {
-    await this.fetchGenres();
-    this.searchDisabled = false;
+    await this.fetchGenres()
+    this.searchDisabled = false
     this.$nextTick(() => {
-      this.$refs.search.focus();
-    });
+      this.$refs.search.focus()
+    })
   },
   methods: {
-    ...mapActions('moviesSearch', [
-      'searchMovies',
-      'fetchGenres'
-    ])
+    ...mapActions('moviesSearch', ['searchMovies', 'fetchGenres'])
   }
-};
+}
 </script>

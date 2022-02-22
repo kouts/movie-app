@@ -15,7 +15,7 @@ export default {
       default: false
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
@@ -32,7 +32,7 @@ export default {
   height: 40px;
 }
 .dual-ring:after {
-  content: " ";
+  content: ' ';
   display: block;
   width: 32px;
   height: 32px;

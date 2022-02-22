@@ -11,7 +11,12 @@
       </div>
       <div class="row mb-2">
         <div class="col-md-4 text-center">
-          <movie-image :path="posterPath" :title="title" style="cursor: pointer" @click.native="$emit('view-details', movieId)" />
+          <movie-image
+            :path="posterPath"
+            :title="title"
+            style="cursor: pointer"
+            @click.native="$emit('view-details', movieId)"
+          />
         </div>
         <div class="col-md-8">
           <div ref="overviewBox" :class="['overview-box', expanded && 'is-expanded']">
@@ -33,9 +38,9 @@
 </template>
 
 <script>
-import { getYearFromIsoDate } from '@/common/utils';
-import MovieImage from '@/components/MovieImage.vue';
-import MovieGenres from '@/components/MovieGenres.vue';
+import { getYearFromIsoDate } from '@/common/utils'
+import MovieImage from '@/components/MovieImage.vue'
+import MovieGenres from '@/components/MovieGenres.vue'
 
 export default {
   components: {
@@ -76,22 +81,22 @@ export default {
     return {
       displayShowMore: false,
       expanded: false
-    };
+    }
   },
   computed: {
     year() {
-      return getYearFromIsoDate(this.releaseDate);
+      return getYearFromIsoDate(this.releaseDate)
     }
   },
   mounted() {
-    this.displayShowMore = this.$refs.overviewBox.scrollHeight - 10 > this.$refs.overviewBox.clientHeight;
+    this.displayShowMore = this.$refs.overviewBox.scrollHeight - 10 > this.$refs.overviewBox.clientHeight
   },
   methods: {
     toggleExpand() {
-      this.expanded = !this.expanded;
+      this.expanded = !this.expanded
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
@@ -113,9 +118,9 @@ export default {
   position: relative;
   z-index: 1;
   margin-top: -25px;
-  background-image: linear-gradient(to bottom, rgba(255,255,255,0.3) 0%, $white 40%, $white 100%);
+  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.3) 0%, $white 40%, $white 100%);
 }
 .show-more.is-on {
-  background-image:none;
+  background-image: none;
 }
 </style>

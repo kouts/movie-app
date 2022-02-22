@@ -24,8 +24,8 @@
 </template>
 
 <script>
-import MovieCard from '@/components/MovieCard.vue';
-import MovieDetails from '@/components/MovieDetails.vue';
+import MovieCard from '@/components/MovieCard.vue'
+import MovieDetails from '@/components/MovieDetails.vue'
 
 export default {
   components: {
@@ -48,19 +48,19 @@ export default {
       selectedMovieId: null,
       selectedMovieTitle: '',
       selectedMovieReleaseDate: null
-    };
+    }
   },
   methods: {
     getMovieGenres(genreIds) {
-      return genreIds.map(id => this.genresMap[id]);
+      return genreIds.map((id) => this.genresMap[id])
     },
     viewDetails(movieId) {
-      const selectedMovie = this.movies.find(movie => movie.id === movieId);
-      this.selectedMovieId = selectedMovie.id;
-      this.selectedMovieTitle = selectedMovie.title;
-      this.selectedMovieReleaseDate = selectedMovie.release_date;
-      this.showDetailsModal = true;
+      const selectedMovie = this.movies.find((movie) => movie.id === movieId)
+      this.selectedMovieId = selectedMovie.id
+      this.selectedMovieTitle = selectedMovie.title
+      this.selectedMovieReleaseDate = selectedMovie.release_date
+      this.showDetailsModal = true
     }
   }
-};
+}
 </script>
